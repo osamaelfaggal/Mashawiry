@@ -416,7 +416,7 @@ function renderDash(){
  '<section class="dash-card"><div class="dash-section-title"><h3>النشاط</h3><span>'+label+'</span></div><div class="activity-stats"><div><i>🚘</i><span>المشاوير</span><b>'+f(a.N)+'</b></div><div><i>◉</i><span>كيلومتر</span><b>'+f(a.km,1)+'</b></div><div><i>◷</i><span>ساعات</span><b>'+f(a.hr,1)+'</b></div></div></section>'+
  '<section class="dash-card"><div class="dash-section-title"><h3>الملخص المالي</h3><span>'+label+'</span></div><div class="finance-grid"><div><i class="finance-icon income">↗</i><span>الإيرادات</span><b>'+money(a.rev)+'</b></div><div><i class="finance-icon expense">↘</i><span>التكاليف</span><b>'+money(costs)+'</b></div></div><div class="finance-progress"><span style="width:'+pct+'%"></span></div><div class="finance-legend"><span>صافي الربح '+f(pct,1)+'%</span><span>التكاليف '+f(100-pct,1)+'%</span></div></section>'+
  '<section class="dash-card"><div class="dash-section-title"><h3>تفاصيل المصروفات</h3><button class="text-action" data-t="exp">إضافة مصروف +</button></div>'+(expenseRows||'<p class="empty-state">لا توجد مصروفات مسجلة في الفترة دي.</p>')+'</section>'+
- '<section class="dash-shortcuts"><button data-t="log">سجل المشاوير</button><button data-t="rep">التقارير والتحليل</button></section>'+
+ '<section class="dash-shortcuts"><button data-t="log">سجل المشاوير</button><button data-t="rep">التقارير والتحليل</button><button data-t="set">الإعدادات</button></section>'+
  '<p class="dash-footnote">ملاحظة: التطبيق لا يسجل وسيلة الدفع لكل مشوار حاليًا، لذلك لا يعرض توزيعًا نقديًّا أو إلكترونيًّا غير موجود في بياناتك.</p>';
 }
 /* سجل المشاوير */
@@ -481,6 +481,12 @@ bind=function(){_bind();
  document.querySelectorAll('[data-et]').forEach(b=>b.onclick=()=>{ET=Object.assign({},T.find(x=>x.id==b.dataset.et));if(ET.dur==null){ET.dur=ET.min;ET.pm=0;ET.rm=0}show();scrollTo(0,0)});
  document.querySelectorAll('[data-ee]').forEach(b=>b.onclick=()=>{EE=Object.assign({},E.find(x=>x.id==b.dataset.ee));show();scrollTo(0,0)});
  on('addT',()=>{ET={};show()});on('tsv',saveT);on('tcx',()=>{ET=null;show()});on('esv',saveE);on('ecx',()=>{EE=null;show()});
+
+ document.querySelectorAll('[data-period]').forEach(b=>b.onclick=()=>{dashPeriod=b.dataset.period;if(dashPeriod==='custom'){dashFrom=dashFrom||nowD();dashTo=dashTo||nowD()}show()});
+ const df=$('dashFrom'),dt=$('dashTo');
+ if(df)df.onchange=()=>{dashFrom=df.value;if(dashTo&&dashFrom>dashTo)dashTo=dashFrom;show()};
+ if(dt)dt.onchange=()=>{dashTo=dt.value;if(dashFrom&&dashTo<dashFrom)dashFrom=dashTo;show()};
+ on('finishDay',()=>{dashPeriod='today';show()});
  const lm=$('lm');if(lm)lm.onchange=()=>{LM=lm.value;show()};
  on('xm',()=>csv([['البند','القيمة'],...rows(inM(selM))],'report-'+selM+'.csv'));
  on('xa',()=>{const ms=months().slice().reverse(),R=ms.map(inM);csv([['البند',...ms],...rows(R[0]||agg([],[])).map((r,i)=>[r[0],...R.map(a=>rows(a)[i][1])])],'months-summary.csv')});
@@ -492,7 +498,7 @@ bind=function(){_bind();
 function show(){
  const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRep,set:renderSet};
  $('m').innerHTML=V[tab]();
- $('nav').innerHTML=[['dash','🏠','الرئيسية'],['calc','🧮','حاسبة'],['log','🧾','مشاوير'],['exp','⛽','مصروفات'],['rep','📊','تقارير'],['set','⚙️','إعدادات']].map(([k,i,l])=>`<a href="#" data-t="${k}" class="${tab==k?'on':''}"><b>${i}</b>${l}</a>`).join('');
+ $('nav').innerHTML=[['dash','▦','الرئيسية'],['log','◷','المشاوير'],['calc','＋',''],['exp','♧','المصروفات'],['rep','▥','التقارير']].map(([k,i,l])=>`<a href="#" data-t="${k}" class="${tab==k?'on':''} ${k==='calc'?'nav-add':''}"><b>${i}</b>${l}</a>`).join('');
  if(tab=='calc')renderRes();bind()}
 show();
 </script>
