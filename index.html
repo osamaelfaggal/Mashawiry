@@ -168,6 +168,69 @@ nav a.on{color:#087f70;background:#eaf6f2}
 @media(max-width:380px){.welcome-row{display:block}.welcome-row .primary-action{margin-top:12px}.quick-tile{display:flex;flex-direction:column;align-items:flex-start}.quick-tile>b{margin-bottom:5px}.quick-tile small{display:none}.field-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
+
+/* Dashboard rebuilt to match the supplied reference */
+:root{--bg:#f3f7f8;--card:#fff;--tx:#253746;--mu:#81909a;--bd:#e7edef;--pr:#153d5a;--g:#16844c;--r:#bd6262}
+body{background:#f3f7f8;color:#263845;font-family:Tahoma,Arial,sans-serif;padding-bottom:92px}
+header{background:#173f60;padding:13px 18px 15px;box-shadow:none}
+header h1{font-size:18px;font-weight:700}
+header p{font-size:11px;color:#d5e3ec}
+main{max-width:620px;padding:14px 13px 28px}
+.dash-top{display:flex;justify-content:space-between;align-items:center;margin:3px 3px 15px}
+.dash-greeting{font-size:12px;color:#7c8d98}
+.dash-top h2{font-size:21px;margin:2px 0;color:#263b4a}
+.dash-top p{font-size:11px;color:#84939c;margin:0}
+.dash-date{font-size:11px;color:#6f8290;background:#e9f0f3;padding:7px 10px;border-radius:20px}
+.dash-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.dash-action{margin:0;background:#fff;color:#324957;border:1px solid #edf1f2;border-radius:28px;box-shadow:0 3px 12px #243e5010;font-size:12px;min-height:43px;padding:8px}
+.dash-action span{color:#16844c;font-size:16px;margin-left:5px}
+.dash-action.secondary{background:#fff}
+.period-switch{display:flex;gap:4px;overflow-x:auto;background:#fff;border-radius:28px;padding:5px;margin-bottom:14px;box-shadow:0 2px 9px #203b4b08}
+.period-btn{flex:1;white-space:nowrap;margin:0;min-height:32px;padding:5px 8px;border-radius:20px;background:transparent;color:#81909a;font-size:10px;box-shadow:none}
+.period-btn.active{background:#173f60;color:white}
+.date-range{display:flex;align-items:center;gap:7px;background:#fff;padding:10px;border-radius:13px;margin:-5px 0 13px}
+.date-range label{margin:0;font-size:11px}.date-range input{min-width:0;padding:7px;font-size:12px;min-height:36px}
+.net-card{background:#fff;border:1px solid #edf1f2;border-radius:20px;padding:17px;margin-bottom:13px;box-shadow:0 3px 14px #1a3b4c08}
+.net-card-head{display:flex;align-items:center;justify-content:space-between;color:#778994;font-size:11px}
+.wallet-mark{width:37px;height:37px;border-radius:11px;background:#edf5f1;color:#16844c;display:grid;place-items:center;font-size:19px}
+.net-card>strong{display:block;color:#278044;font-size:29px;line-height:1.5;font-weight:800}
+.net-card>strong small,.finance-grid b small{font-size:11px;font-weight:500}
+.net-card>small{display:block;color:#8b999f;font-size:10px}
+.net-ratios{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px;background:#f4f8f8;border-radius:13px;padding:9px 5px}
+.net-ratios div{text-align:center;border-left:1px solid #e7eeee}
+.net-ratios div:last-child{border:0}
+.net-ratios span{display:block;color:#84939c;font-size:9px}
+.net-ratios b{font-size:12px;color:#344b59}
+.dash-card{background:#fff;border:1px solid #edf1f2;border-radius:19px;padding:15px;margin-bottom:12px;box-shadow:0 3px 13px #1a3b4c07}
+.dash-section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dash-section-title h3{margin:0;font-size:13px;color:#354b58}
+.dash-section-title>span{font-size:10px;color:#91a0a7}
+.activity-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.activity-stats>div{display:grid;grid-template-columns:28px 1fr;align-items:center;column-gap:6px}
+.activity-stats i{grid-row:span 2;width:27px;height:27px;border-radius:9px;background:#eef4f7;color:#58758a;display:grid;place-items:center;font-style:normal;font-size:13px}
+.activity-stats span,.finance-grid span{font-size:9px;color:#84939c}
+.activity-stats b{font-size:13px;color:#354b58}
+.finance-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.finance-grid>div{display:grid;grid-template-columns:28px 1fr;column-gap:7px;align-items:center}
+.finance-grid i{grid-row:span 2;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-style:normal}
+.finance-icon.income{background:#edf6f0;color:#23864b}.finance-icon.expense{background:#fbf0ef;color:#b96b68}
+.finance-grid b{font-size:13px;color:#344a57}
+.finance-progress{height:6px;background:#f3e9e8;border-radius:10px;overflow:hidden;margin-top:15px}
+.finance-progress span{display:block;height:100%;background:#24965b;border-radius:10px}
+.finance-legend{display:flex;justify-content:space-between;color:#84939c;font-size:9px;margin-top:6px}
+.payment-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eff2f3;font-size:11px;color:#526672}
+.payment-row:last-child{border:0}.payment-row b{color:#344a57}
+.empty-state,.dash-footnote{font-size:10px;color:#91a0a7;line-height:1.7}
+.text-action{width:auto;margin:0;padding:3px;background:transparent;color:#16816f;box-shadow:none;font-size:10px;min-height:0}
+.dash-shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dash-shortcuts button{margin:0;background:#fff;color:#526b7a;border:1px solid #e8eef0;box-shadow:none;font-size:11px;min-height:39px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-around;background:#fff;border-top:1px solid #e8edef;padding:5px 8px calc(5px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 18px #1d39490a}
+nav a{flex:1;text-align:center;padding:4px 1px;font-size:9px;color:#a0adb4;display:flex;flex-direction:column;align-items:center;gap:1px;text-decoration:none}
+nav a b{display:block;font-size:18px;line-height:1.25}
+nav a.on{color:#173f60;font-weight:700}
+nav a.nav-add{flex:0 0 48px;width:48px;height:48px;margin-top:-22px;border-radius:50%;background:#173f60;color:white;box-shadow:0 4px 12px #173f6033;justify-content:center;border:3px solid #f3f7f8}
+nav a.nav-add b{font-size:25px;line-height:1}
+@media(min-width:700px){main{max-width:620px}.net-card,.dash-card{padding:18px}.dash-top h2{font-size:24px}}
 </style>
 </head>
 <body>
@@ -330,21 +393,33 @@ function bars(t,v,l,col){const neg=v.some(x=>x<0),base=neg?50:72,sc=neg?32:55,mx
 function warn(a){return a.N&&!a.cash?'<div class="card note" style="color:var(--y)">⚠️ مفيش مصروفات نقدية متسجلة في الفترة دي، فالصافي مبالغ فيه. سجّل الغاز والبنزين والزيت.</div>':''}
 const note0='<div class="note">الصافي = الإيراد − العمولة − المصروفات النقدية الفعلية − احتياطي الصيانة. الاحتياطي = كم المشاوير × احتياطي الكم، وبيتخصم منه أي صيانة/إصلاح فعلي مسجل عشان ميتحسبش مرتين. تكلفة التشغيل التقديرية للمقارنة فقط ومش بتتخصم. المصروفات بتتسجل يوم الشراء فصافي اليوم ممكن يتأرجح.</div>';
 /* الرئيسية */
+let dashPeriod='today',dashFrom='',dashTo='';
 function renderDash(){
- const d=nowD(),m=d.slice(0,7),a=agg(T.filter(x=>x.d==d),E.filter(x=>x.d==d)),b=inM(m),tg=n(S.target)*n(S.days)*n(S.hours),pc=tg?Math.max(0,Math.min(100,b.net/tg*100)):0;
+ const d=nowD(),m=d.slice(0,7),dates=T.map(x=>x.d).concat(E.map(x=>x.d)).filter(Boolean).sort();
+ let from=d,to=d,label='النهارده';
+ if(dashPeriod==='week'){const dt=new Date(d+'T12:00:00');dt.setDate(dt.getDate()-6);from=dt.getFullYear()+'-'+p2(dt.getMonth()+1)+'-'+p2(dt.getDate());label='آخر 7 أيام'}
+ else if(dashPeriod==='month'){from=m+'-01';label='الشهر ده'}
+ else if(dashPeriod==='year'){from=d.slice(0,4)+'-01-01';label='السنة دي'}
+ else if(dashPeriod==='custom'){from=dashFrom||dates[0]||d;to=dashTo||d;label='فترة مخصصة'}
+ const trips=T.filter(x=>x.d>=from&&x.d<=to),expenses=E.filter(x=>x.d>=from&&x.d<=to);
+ const a=agg(trips,expenses),costs=a.cash+a.comm+a.prov;
  const money=x=>f(x)+' <small>ج.م</small>';
- const mini=x=>'<div class="metric-grid">'+[
-  ['المشاوير',f(x.N),'عدد الرحلات','route'],
-  ['إجمالي الإيراد',money(x.rev),'قبل خصم العمولة','wallet'],
-  ['المصروفات',money(x.cash+x.prov),'فعلي + احتياطي','receipt'],
-  ['صافي الربح',money(x.net),'بعد كل التكاليف','trending']
- ].map((v,i)=>'<article class="metric-card '+(i===3?'metric-primary':'')+'"><span>'+v[2]+'</span><strong class="'+(i===3?(x.net>=0?'pos':'neg'):'')+'">'+v[1]+'</strong><small>'+v[0]+'</small></article>').join('')+'</div>';
- return '<section class="welcome-row"><div><span class="eyebrow">لوحة التحكم / '+d+'</span><h2>أهلاً بيك في مشاويري</h2><p>خلّي أرقامك واضحة… وقرارك في كل مشوار محسوب.</p></div><button class="primary-action" data-t="calc">＋ احسب مشوار</button></section>'+
- '<section class="profit-panel"><div class="profit-copy"><span class="eyebrow">صافي ربح الشهر حتى الآن</span><strong>'+money(b.net)+'</strong><p>بعد العمولة والمصروفات واحتياطي الصيانة</p></div><div class="progress-wrap"><div class="progress-meta"><span>تحقيق هدف الشهر</span><b>'+f(pc)+'%</b></div><div class="progress-track"><i style="width:'+pc+'%"></i></div><small>الهدف المحدد: '+f(tg)+' ج.م</small></div></section>'+
- '<section class="section-block"><div class="section-heading"><div><span class="eyebrow">نظرة سريعة</span><h3>أداء النهارده</h3></div><span class="date-pill">'+d+'</span></div>'+mini(a)+warn(a)+'</section>'+
- '<section class="section-block"><div class="section-heading"><div><span class="eyebrow">ملخص الفترة</span><h3>أداء الشهر</h3></div><span class="live-dot">● محدث من بياناتك</span></div>'+mini(b)+'</section>'+
- '<section class="quick-grid"><button class="quick-tile" data-t="log"><b>＋</b><span>تسجيل مشوار</span><small>أضف رحلة يدويًا</small></button><button class="quick-tile" data-t="exp"><b>↗</b><span>تسجيل مصروف</span><small>تابع مصاريف عربيتك</small></button><button class="quick-tile" data-t="rep"><b>▥</b><span>تحليل الأداء</span><small>راجع أرقامك بالتفصيل</small></button></section>'+note0;
-}/* سجل المشاوير */
+ const periodBtn=(key,txt)=>'<button type="button" class="period-btn '+(dashPeriod===key?'active':'')+'" data-period="'+key+'">'+txt+'</button>';
+ const expenseTypes={};expenses.forEach(x=>expenseTypes[x.t]=(expenseTypes[x.t]||0)+n(x.a));
+ const expenseRows=Object.entries(expenseTypes).sort((x,y)=>y[1]-x[1]).map(([k,v])=>'<div class="payment-row"><span>'+esc(k)+'</span><b>'+money(v)+'</b></div>').join('');
+ const pct=a.rev>0?Math.max(0,Math.min(100,a.net/a.rev*100)):0;
+ return '<section class="dash-top"><div><span class="dash-greeting">أهلاً بيك</span><h2>ملخص مشاويرك</h2><p>تابع شغلك وأرباحك في مكان واحد</p></div><span class="dash-date">'+d+'</span></section>'+
+ '<section class="dash-actions"><button class="dash-action" data-t="calc"><span>＋</span> مشوار جديد</button><button class="dash-action secondary" id="finishDay"><span>✓</span> ملخص اليوم</button></section>'+
+ '<section class="period-switch">'+periodBtn('today','النهارده')+periodBtn('week','7 أيام')+periodBtn('month','الشهر ده')+periodBtn('year','السنة دي')+periodBtn('custom','مخصص')+'</section>'+
+ (dashPeriod==='custom'?'<section class="date-range"><label>من</label><input type="date" id="dashFrom" value="'+(dashFrom||from)+'"><label>إلى</label><input type="date" id="dashTo" value="'+(dashTo||to)+'"></section>':'')+
+ '<section class="net-card"><div class="net-card-head"><span>صافي الربح · '+label+'</span><span class="wallet-mark">▣</span></div><strong>'+money(a.net)+'</strong><small>بعد العمولة والمصروفات واحتياطي الصيانة</small><div class="net-ratios"><div><span>صافي / كم</span><b>'+f(a.pk,2)+' ج</b></div><div><span>تكلفة / كم</span><b>'+f(a.km?(a.comm+a.cash+a.prov)/a.km:0,2)+' ج</b></div><div><span>صافي / ساعة</span><b>'+f(a.ph,2)+' ج</b></div></div></section>'+
+ '<section class="dash-card"><div class="dash-section-title"><h3>النشاط</h3><span>'+label+'</span></div><div class="activity-stats"><div><i>🚘</i><span>المشاوير</span><b>'+f(a.N)+'</b></div><div><i>◉</i><span>كيلومتر</span><b>'+f(a.km,1)+'</b></div><div><i>◷</i><span>ساعات</span><b>'+f(a.hr,1)+'</b></div></div></section>'+
+ '<section class="dash-card"><div class="dash-section-title"><h3>الملخص المالي</h3><span>'+label+'</span></div><div class="finance-grid"><div><i class="finance-icon income">↗</i><span>الإيرادات</span><b>'+money(a.rev)+'</b></div><div><i class="finance-icon expense">↘</i><span>التكاليف</span><b>'+money(costs)+'</b></div></div><div class="finance-progress"><span style="width:'+pct+'%"></span></div><div class="finance-legend"><span>صافي الربح '+f(pct,1)+'%</span><span>التكاليف '+f(100-pct,1)+'%</span></div></section>'+
+ '<section class="dash-card"><div class="dash-section-title"><h3>تفاصيل المصروفات</h3><button class="text-action" data-t="exp">إضافة مصروف +</button></div>'+(expenseRows||'<p class="empty-state">لا توجد مصروفات مسجلة في الفترة دي.</p>')+'</section>'+
+ '<section class="dash-shortcuts"><button data-t="log">سجل المشاوير</button><button data-t="rep">التقارير والتحليل</button></section>'+
+ '<p class="dash-footnote">ملاحظة: التطبيق لا يسجل وسيلة الدفع لكل مشوار حاليًا، لذلك لا يعرض توزيعًا نقديًّا أو إلكترونيًّا غير موجود في بياناتك.</p>';
+}
+/* سجل المشاوير */
 function tripForm(t){const tm=t.tm||(t.h!=null?p2(t.h)+':00':nowT());
  return head(t.id?'✏️ تعديل مشوار':'➕ تسجيل مشوار')+`<div class="row"><div><label>التاريخ</label><input type="date" id="f_d" value="${t.d||nowD()}"></div><div><label>الوقت</label><input type="time" id="f_tm" value="${tm}"></div>${inp('f_pick','المسافة للراكب (كم)',t.pick??'')}${inp('f_pm','مدة الوصول (د)',t.pm??'')}${inp('f_dist','مسافة المشوار (كم)',t.dist??'')}${inp('f_dur','مدة المشوار (د)',t.dur??'')}${inp('f_ret','رجوع فاضي (كم)',t.ret??'')}${inp('f_rm','مدة الرجوع (د)',t.rm??'')}${inp('f_off','السعر المعروض',t.off??'')}${inp('f_acc','السعر المتفق عليه',t.acc??'')}</div>${inp('f_rev','الإيراد الفعلي (قبل العمولة)',t.rev??'')}<div class="row"><button id="tsv">حفظ</button><button class="s" id="tcx">إلغاء</button></div></div>`}
 function saveT(){
