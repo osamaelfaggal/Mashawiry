@@ -714,7 +714,7 @@ bind=function(){_bind();
  const im=$('imp');if(im)im.onchange=()=>{const fl=im.files[0];if(!fl)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!Array.isArray(o.T)||!Array.isArray(o.E)||typeof o.S!='object')throw 0;S=Object.assign({},DEF,o.S);T=o.T;E=o.E;sv('ind_s',S);sv('ind_t',T);sv('ind_e',E);$('bkm').textContent='تمت الاستعادة ✅ ('+T.length+' مشوار، '+E.length+' مصروف)'}catch(x){$('bkm').textContent='الملف مش نسخة صالحة'}};rd.readAsText(fl)};
 };
 function show(){
- const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRep,set:renderSet};
+ const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRepV2,set:renderSet};
  $('m').innerHTML=V[tab]();
  $('nav').innerHTML=[['dash','▦','الرئيسية'],['log','◷','المشاوير'],['calc','＋',''],['exp','♧','المصروفات'],['rep','▥','التقارير']].map(([k,i,l])=>`<a href="#" data-t="${k}" class="${tab==k?'on':''} ${k==='calc'?'nav-add':''}"><b>${i}</b>${l}</a>`).join('');
  if(tab=='calc')renderRes();bind()}
