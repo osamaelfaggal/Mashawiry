@@ -625,7 +625,7 @@ bind=function(){_bind();
  const im=$('imp');if(im)im.onchange=()=>{const fl=im.files[0];if(!fl)return;const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!Array.isArray(o.T)||!Array.isArray(o.E)||typeof o.S!='object')throw 0;S=Object.assign({},DEF,o.S);T=o.T;E=o.E;sv('ind_s',S);sv('ind_t',T);sv('ind_e',E);$('bkm').textContent='تمت الاستعادة ✅ ('+T.length+' مشوار، '+E.length+' مصروف)'}catch(x){$('bkm').textContent='الملف مش نسخة صالحة'}};rd.readAsText(fl)};
 };
 function show(){
- const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRep,set:renderSet};
+ const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRepV2,set:renderSet};
  $('m').innerHTML=V[tab]();
  $('nav').innerHTML=[['dash','🏠','الرئيسية'],['calc','🧮','حاسبة'],['log','🧾','مشاوير'],['exp','⛽','مصروفات'],['rep','📊','تقارير'],['set','⚙️','إعدادات']].map(([k,i,l])=>`<a href="#" data-t="${k}" class="${tab==k?'on':''}"><b>${i}</b>${l}</a>`).join('');
  if(tab=='calc')renderRes();bind()}
@@ -755,6 +755,54 @@ function renderDash(){
  '<section class="dash-card"><div class="dash-section-title"><h3>تفاصيل المصروفات</h3><button class="text-action" data-t="exp">إضافة مصروف +</button></div>'+(expenseRows||'<p class="empty-state">لا توجد مصروفات مسجلة في الفترة دي.</p>')+'</section>'+
  '<section class="dash-shortcuts"><button data-t="log">سجل المشاوير</button><button data-t="rep">التقارير والتحليل</button><button data-t="set">الإعدادات</button></section>'+
  '<p class="dash-footnote">ملاحظة: التطبيق لا يسجل وسيلة الدفع لكل مشوار حاليًا، لذلك لا يعرض توزيعًا نقديًّا أو إلكترونيًّا غير موجود في بياناتك.</p>';
+}
+
+function renderRepV2(){
+ const ms=months();selM=selM&&ms.includes(selM)?selM:ms[0];const m=selM||nowD().slice(0,7);
+ const t=T.filter(x=>mon(x.d)==m),e=E.filter(x=>mon(x.d)==m),a=agg(t,e),c=Math.min(n(S.comm),99)/100;
+ const monthLabel=m;
+ const money=v=>f(v)+' <small>جنيه</small>';
+ const daysInMonth=new Date(+m.slice(0,4),+m.slice(5,7),0).getDate();
+ const daily=Array.from({length:daysInMonth},(_,i)=>{const d=m+'-'+p2(i+1),tt=t.filter(x=>x.d===d),ee=e.filter(x=>x.d===d);return{d,net:agg(tt,ee).net,rev:sum(tt,'rev')}});
+ const expenseMap={};e.forEach(x=>expenseMap[x.t]=(expenseMap[x.t]||0)+n(x.a));
+ expenseMap['عمولة التطبيق']=(expenseMap['عمولة التطبيق']||0)+a.comm;
+ expenseMap['احتياطي الصيانة']=(expenseMap['احتياطي الصيانة']||0)+a.prov;
+ const cats=Object.entries(expenseMap).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
+ const colors={'غاز':'#2496c7','بنزين':'#e49a27','زيت':'#8b70c8','صيانة':'#e16b58','إصلاح':'#d34d67','أخرى':'#8295a4','عمولة التطبيق':'#0d9b72','احتياطي الصيانة':'#20a486'};const colorFor=k=>colors[k]||'#8295a4';
+ const totalCosts=cats.reduce((z,x)=>z+x[1],0);
+ let cursor=0;const slices=cats.map(([name,val])=>{const start=cursor;cursor+=totalCosts?val/totalCosts*100:0;return colorFor(name)+' '+start+'% '+cursor+'%'}).join(',');
+ const donutStyle=totalCosts?'background:conic-gradient('+slices+')':'background:#eaf0f3';
+ const legend=cats.length?cats.map(([name,val])=>'<div class="report-legend-row"><i class="report-dot" style="background:'+colorFor(name)+'"></i><div>'+esc(name)+'<b>'+money(val)+'</b></div></div>').join(''):'<span class="report-note">لا توجد مصروفات مسجلة.</span>';
+ const barsMax=Math.max(1,...cats.map(x=>x[1]));
+ const bars=cats.length?'<div class="report-bars">'+cats.map(([name,val])=>'<div class="report-bar-col"><span class="report-bar-lab">'+esc(name)+'</span><span class="report-bar-val">'+f(val,0)+' ج</span><div class="report-bar-bg"><i class="report-bar-fill" style="width:'+Math.max(2,val/barsMax*100)+'%;background:'+colorFor(name)+'"></i></div></div>').join('')+'</div>':'<div class="report-note">سجّل المصروفات عشان يظهر تحليلها هنا.</div>';
+ const activeDays=daily.filter(x=>x.rev>0),maxDay=Math.max(1,...activeDays.map(x=>Math.max(0,x.net))),w=620,h=180,pad=22;
+ const points=activeDays.map((x,i)=>({x:pad+(activeDays.length<=1?0:i/(activeDays.length-1)*(w-pad*2)),y:h-pad-(Math.max(0,x.net)/maxDay)*(h-pad*2),...x}));
+ const line=points.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');
+ const area=points.length?line+' L '+points[points.length-1].x+' '+(h-pad)+' L '+points[0].x+' '+(h-pad)+' Z':'';
+ const trend=points.length?'<svg class="report-trend" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="منحنى صافي الربح اليومي"><defs><linearGradient id="reportArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#159766" stop-opacity=".25"/><stop offset="100%" stop-color="#159766" stop-opacity="0"/></linearGradient></defs>'+[.25,.5,.75].map(v=>'<line x1="'+pad+'" x2="'+(w-pad)+'" y1="'+(pad+(h-pad*2)*v)+'" y2="'+(pad+(h-pad*2)*v)+'" stroke="var(--bd)" stroke-dasharray="3 4"/>').join('')+'<path d="'+area+'" fill="url(#reportArea)"/><path d="'+line+'" fill="none" stroke="#159766" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+points.map(p=>'<circle cx="'+p.x+'" cy="'+p.y+'" r="4" fill="#fff" stroke="#08784f" stroke-width="2"><title>'+p.d+': '+f(p.net)+' جنيه</title></circle>').join('')+'<text x="'+pad+'" y="'+(h-4)+'" class="report-trend-label">'+(points[0].d.slice(-2))+'</text><text x="'+(w-pad)+'" y="'+(h-4)+'" text-anchor="end" class="report-trend-label">'+(points[points.length-1].d.slice(-2))+'</text></svg>':'<div class="report-note">لا توجد مشاوير مسجلة خلال الشهر.</div>';
+ const H=grp(t,x=>x.h,c).sort((x,y)=>y.ph-x.ph),Dk=grp(t,x=>bk(x.km,[5,10,20]),c).sort((x,y)=>x.k-y.k),F=grp(t,x=>bk(x.rev,[40,70,100]),c).sort((x,y)=>x.k-y.k);
+ const best=H[0],weak=H.length?H[H.length-1]:null,goodPct=a.N? a.good/a.N*100:0;
+ const prev=ms[ms.indexOf(m)+1]?agg(T.filter(x=>mon(x.d)==ms[ms.indexOf(m)+1]),E.filter(x=>mon(x.d)==ms[ms.indexOf(m)+1])):null;
+ const compareMonth=cmpM&&ms.includes(cmpM)?cmpM:(ms[1]||m),compare=agg(T.filter(x=>mon(x.d)==compareMonth),E.filter(x=>mon(x.d)==compareMonth));
+ const compareRows=[['صافي الربح',a.net,compare.net],['الإيرادات',a.rev,compare.rev],['التكاليف',totalCosts,compare.cash+compare.comm+compare.prov],['عدد المشاوير',a.N,compare.N],['المسافة',a.km,compare.km]];
+ const compareHtml=compareRows.map(([label,v1,v2])=>{const diff=v1-v2,pct=v2?diff/Math.abs(v2)*100:null;return '<div class="report-compare-item"><small>'+label+'</small><b>'+f(v1,label==='المسافة'?1:0)+(label==='المسافة'?' كم':label==='عدد المشاوير'?' رحلة':' جنيه')+'</b><em style="color:'+(diff>=0?'#07835e':'#d34d59')+'">'+(pct===null?'لا توجد بيانات للمقارنة':(diff>=0?'▲ ':'▼ ')+f(Math.abs(pct),1)+'% مقارنة بالشهر الآخر')+'</em></div>'}).join('');
+ const delta=prev&&prev.net!==0?(a.net-prev.net)/Math.abs(prev.net)*100:null;
+ const insight=a.N?'<div class="report-insight">'+(best?'أفضل فترة مسجلة: <b>'+best.k+':00</b> بصافي '+f(best.ph)+' جنيه/ساعة. ':'')+(weak&&weak.k!==best?.k?'أقل وقت أداءً: '+weak.k+':00. ':'')+'نسبة المشاوير اللي حققت هدفك <b>'+f(goodPct,0)+'%</b>.</div>':'<div class="report-insight">ابدأ بتسجيل مشاويرك، وهنا هتلاقي تحليل أدائك الشهري.</div>';
+ const kpi=(title,value,sub)=>{const kind=title.includes('الإيرادات')?'income':title.includes('صافي')?'profit':title.includes('التكاليف')?'cost':'trips';return '<div class="report-kpi '+kind+'"><small>'+title+'</small><strong>'+value+'</strong><em>'+sub+'</em></div>'};
+ let out='<div class="report-shell"><div class="report-toolbar"><div><h2>التقرير المالي</h2><p>نظرة شاملة على أداء مشاويرك</p></div><select id="sm" aria-label="اختيار الشهر">'+ms.map(x=>'<option value="'+x+'" '+(x===m?'selected':'')+'>'+x+'</option>').join('')+'</select></div>'+
+ '<div class="report-kpis">'+kpi('إجمالي الإيرادات',money(a.rev),'قبل خصم العمولة',false)+kpi('صافي الربح',money(a.net),'بعد التكاليف المسجلة والاحتياطي',true)+kpi('إجمالي التكاليف',money(totalCosts),'عمولة + مصروفات + احتياطي',false)+kpi('عدد المشاوير',f(a.N),'خلال الشهر',false)+'</div>'+
+ '<div class="report-panels"><section class="report-panel"><div class="report-panel-head"><h3>المصروفات حسب النوع</h3><span>جنيه</span></div>'+bars+'</section>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>توزيع التكاليف حسب النوع</h3><span>النسبة من الإجمالي</span></div><div class="report-donut-wrap"><div class="report-donut" style="'+donutStyle+'"><div class="report-donut-center"><span>إجمالي التكاليف</span><b>'+f(totalCosts,0)+'</b><span>جنيه</span></div></div><div class="report-legend">'+legend+'</div></div></section>'+
+ '<section class="report-panel wide"><div class="report-panel-head"><h3>حركة صافي الربح</h3><span>يوميًا · '+monthLabel+'</span></div>'+trend+'</section></div>'+
+ '<div class="report-two"><section class="report-panel"><div class="report-panel-head"><h3>مؤشرات التشغيل</h3><span>خلال الشهر</span></div><div class="report-list">'+
+ '<div class="report-list-row"><span>إجمالي المسافة</span><b>'+f(a.km,1)+' كم</b></div><div class="report-list-row"><span>مدة الرحلات المسجلة</span><b>'+f(a.hr,1)+' ساعة</b></div><div class="report-list-row"><span>متوسط الإيراد لكل رحلة</span><b>'+f(a.aRev)+' جنيه</b></div><div class="report-list-row"><span>صافي الربح لكل ساعة</span><b>'+f(a.ph)+' جنيه</b></div><div class="report-list-row"><span>صافي الربح لكل كيلومتر</span><b>'+f(a.pk,2)+' جنيه</b></div><div class="report-list-row"><span>تكلفة التشغيل التقديرية</span><b>'+f(a.est)+' جنيه</b></div></div></section>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>تقييم الأداء</h3><span>مقارنة بهدفك</span></div><div class="report-list-row"><span>مشاوير حققت الهدف</span><b>'+f(a.good)+' من '+f(a.N)+'</b></div><div class="report-progress"><i style="width:'+goodPct+'%"></i></div>'+insight+(prev?'<div class="report-list-row"><span>مقارنة بالشهر السابق</span><b class="'+(delta>=0?'pos':'neg')+'">'+(delta>=0?'+':'')+f(delta,1)+'%</b></div>':'')+'</section></div>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>أفضل أوقات العمل</h3><span>صافي تقديري لكل ساعة</span></div>'+tbl(H.slice(0,5),x=>x+':00')+'</section>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>تحليل الرحلات</h3><span>حسب المسافة وقيمة الرحلة</span></div><div class="report-two"><div><b style="font-size:12px">حسب المسافة</b>'+tbl(Dk,k=>DL[k])+'</div><div><b style="font-size:12px">حسب قيمة الرحلة</b>'+tbl(F,k=>FL[k])+'</div></div></section>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>مقارنة بين الشهور</h3><span>قارن الشهر الحالي بشهر آخر</span></div><select id="cm" style="max-width:220px;margin-bottom:10px">'+ms.map(x=>'<option value="'+x+'" '+(x===compareMonth?'selected':'')+'>'+x+'</option>').join('')+'</select><div class="report-compare-grid">'+compareHtml+'</div></section>'+
+ '<p class="report-note">صافي الربح = الإيرادات − عمولة التطبيق − المصروفات النقدية الفعلية − احتياطي الصيانة. احتياطي الصيانة تقديري، ويُخصم منه ما تم تسجيله كصيانة أو إصلاح لتجنب الخصم المزدوج. تكلفة التشغيل التقديرية للمقارنة فقط ولا تُخصم مرة أخرى.</p>'+
+ '<div class="report-actions"><button class="s" id="exT">تصدير المشاوير</button><button class="s" id="exE">تصدير المصروفات</button></div></div>';
+ return out;
 }
 
 const _bindIntegrated=bind;bind=function(){_bindIntegrated();document.querySelectorAll('[data-period]').forEach(b=>b.onclick=()=>{dashPeriod=b.dataset.period;if(dashPeriod==='custom'){dashFrom=dashFrom||nowD();dashTo=dashTo||nowD()}show()});const df=$('dashFrom'),dt=$('dashTo');if(df)df.onchange=()=>{dashFrom=df.value;if(dashTo&&dashFrom>dashTo)dashTo=dashFrom;show()};if(dt)dt.onchange=()=>{dashTo=dt.value;if(dashFrom&&dashTo<dashFrom)dashFrom=dashTo;show()};const fd=$('finishDay');if(fd)fd.onclick=()=>{dashPeriod='today';show()}};
