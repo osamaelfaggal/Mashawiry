@@ -506,11 +506,10 @@ function renderRepV2(){
  expenseMap['عمولة التطبيق']=(expenseMap['عمولة التطبيق']||0)+a.comm;
  expenseMap['احتياطي الصيانة']=(expenseMap['احتياطي الصيانة']||0)+a.prov;
  const cats=Object.entries(expenseMap).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
- const palette=['#08784f','#16a36a','#75b798','#d5a441','#6286a0','#9a86b8','#c17b67'];
+ const colors={'غاز':'#2496c7','بنزين':'#e49a27','زيت':'#8b70c8','صيانة':'#e16b58','إصلاح':'#d34d67','أخرى':'#8295a4','عمولة التطبيق':'#0d9b72','احتياطي الصيانة':'#20a486'};const colorFor=k=>colors[k]||'#8295a4';
  const totalCosts=cats.reduce((z,x)=>z+x[1],0);
- let cursor=0;const slices=cats.map((x,i)=>{const start=cursor;cursor+=totalCosts?x[1]/totalCosts*100:0;return palette[i%palette.length]+' '+start+'% '+cursor+'%'}).join(',');
- const donutStyle=totalCosts?'background:conic-gradient('+slices+')':'background:var(--bd)';
- const colors={'غاز':'#2496c7','بنزين':'#e49a27','زيت':'#8b70c8','صيانة':'#e16b58','إصلاح':'#d34f67','أخرى':'#8295a4','عمولة التطبيق':'#0d9b72','احتياطي الصيانة':'#20a486'};const colorFor=k=>colors[k]||'#8295a4';
+ let cursor=0;const slices=cats.map(([name,val])=>{const start=cursor;cursor+=totalCosts?val/totalCosts*100:0;return colorFor(name)+' '+start+'% '+cursor+'%'}).join(',');
+ const donutStyle=totalCosts?'background:conic-gradient('+slices+')':'background:#eaf0f3';
  const legend=cats.length?cats.map(([name,val])=>'<div class="report-legend-row"><i class="report-dot" style="background:'+colorFor(name)+'"></i><div>'+esc(name)+'<b>'+money(val)+'</b></div></div>').join(''):'<span class="report-note">لا توجد مصروفات مسجلة.</span>';
  const barsMax=Math.max(1,...cats.map(x=>x[1]));
  const bars=cats.length?'<div class="report-bars">'+cats.map(([name,val])=>'<div class="report-bar-col"><span class="report-bar-lab">'+esc(name)+'</span><span class="report-bar-val">'+f(val,0)+' ج</span><div class="report-bar-bg"><i class="report-bar-fill" style="width:'+Math.max(2,val/barsMax*100)+'%;background:'+colorFor(name)+'"></i></div></div>').join('')+'</div>':'<div class="report-note">سجّل المصروفات عشان يظهر تحليلها هنا.</div>';
