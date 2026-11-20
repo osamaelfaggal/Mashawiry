@@ -1,1 +1,1 @@
-Rebuild after Android SDK setup correction.
+Rebuild APK with the Mashawiry car launcher icon and branded splash screen.
