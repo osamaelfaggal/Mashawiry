@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#173f60"><script>if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js")</script><title>مشاويري — إدارة المشاوير والأرباح</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--tx:#1c2733;--mu:#6b7785;--bd:#e1e6eb;--pr:#0f766e;--g:#16a34a;--y:#d97706;--r:#dc2626;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media all{:root:not([data-theme=light]){--bg:#10161c;--card:#1a232c;--tx:#e8eef3;--mu:#94a3b0;--bd:#2c3945;--pr:#0f9d8f}}
@@ -75,7 +76,7 @@ td,th{padding:10px 8px}
 
 /* ===== Product-grade Mashawiri redesign ===== */
 :root{--bg:#f3f6f8;--card:#fff;--tx:#142b3b;--mu:#718391;--bd:#e3eaee;--pr:#087f70;--g:#0b9b72;--y:#c9871b;--r:#d64d59}
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+
 html{background:var(--bg);scroll-behavior:smooth}
 body{font-family:'Cairo',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.65;padding:0 0 calc(88px + env(safe-area-inset-bottom,0px))}
 header{position:relative;background:#102c3c;color:#fff;padding:22px max(20px,calc((100% - 1080px)/2)) 25px;box-shadow:none;border:0;overflow:hidden}
@@ -237,6 +238,65 @@ nav a.nav-add b{font-size:25px;line-height:1}
 body{background:#f3f7fa!important;color:#263845!important}
 header{background:#173f60!important;color:#fff!important}
 #nav a{cursor:pointer}
+
+/* Readability + simplified dashboard refresh */
+html,body{font-family:"Cairo","Noto Sans Arabic","Noto Naskh Arabic",Tahoma,Arial,sans-serif!important}
+body{font-size:15px;line-height:1.7;background:#f5f8fa!important;color:#203746!important}
+button,input,select{font-family:inherit!important}
+header{padding:15px 18px!important;background:#153b52!important}
+header h1{font-size:21px!important}
+main{max-width:780px!important;padding:18px 15px 30px!important}
+.dash-v2{direction:rtl}
+.dash-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:2px 2px 17px}
+.dash-head h2{font-size:22px;line-height:1.4;font-weight:900;margin:2px 0;color:#17384b}
+.dash-head p{font-size:12px;color:#7b8c97;margin:2px 0}
+.dash-date{font-size:11px;color:#687d89;background:#eaf0f3;border-radius:10px;padding:7px 10px;white-space:nowrap}
+.dash-periods{display:flex;gap:6px;padding:4px;background:#eaf0f2;border-radius:13px;margin-bottom:13px}
+.dash-periods .period-btn{flex:1;min-width:0;padding:8px 4px;min-height:38px;border-radius:10px;font-size:11px;font-weight:800;color:#657b88;background:transparent;box-shadow:none}
+.dash-periods .period-btn.active{background:#fff;color:#126e62;box-shadow:0 2px 7px #183b4b12}
+.dash-custom{display:grid;grid-template-columns:1fr 1fr;gap:9px;background:#fff;border:1px solid #e6edef;border-radius:14px;padding:12px;margin-bottom:13px}
+.dash-custom label{margin:0 0 4px;font-size:11px}
+.dash-custom input{font-size:13px;min-height:40px;padding:8px}
+.dash-profit{position:relative;overflow:hidden;background:linear-gradient(125deg,#143c50,#087d70);color:#fff;border-radius:21px;padding:20px;margin-bottom:13px;box-shadow:0 10px 24px #0d4e4a20}
+.dash-profit:after{content:"";position:absolute;width:170px;height:170px;border:1px solid #ffffff18;border-radius:50%;left:-65px;top:-90px;box-shadow:0 0 0 22px #ffffff08,0 0 0 45px #ffffff05}
+.dash-profit-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.dash-profit-top span{font-size:12px;color:#d4eee8;font-weight:700}
+.dash-profit-top small{font-size:10px;color:#b5d8d2}
+.dash-profit-value{font-size:34px;font-weight:900;line-height:1.5;margin:5px 0 0;position:relative;z-index:1;direction:rtl}
+.dash-profit-value small{font-size:13px;font-weight:600}
+.dash-profit-note{font-size:10px;color:#c5e3dd;position:relative;z-index:1}
+.dash-profit-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:16px;position:relative;z-index:1}
+.dash-profit-metrics div{background:#ffffff13;border:1px solid #ffffff1b;border-radius:11px;padding:8px 5px;text-align:center}
+.dash-profit-metrics span{display:block;font-size:10px;color:#c8e4df}
+.dash-profit-metrics b{font-size:13px;color:#fff}
+.dash-actions-v2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 0 18px}
+.dash-actions-v2 button{margin:0;min-height:47px;border-radius:13px;font-size:13px}
+.dash-actions-v2 .add-trip{background:#087f70;color:white}
+.dash-actions-v2 .add-exp{background:#fff;color:#355262;border:1px solid #e2eaed;box-shadow:none}
+.dash-section{margin:17px 0}
+.dash-section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.dash-section-head h3{font-size:15px;font-weight:900;color:#1e3c4d;margin:0}
+.dash-section-head span{font-size:10px;color:#82929b}
+.dash-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dash-stat{background:#fff;border:1px solid #e6edef;border-radius:14px;padding:12px 9px;min-width:0}
+.dash-stat span{display:block;font-size:10px;color:#7b8c96}
+.dash-stat b{display:block;font-size:18px;color:#203d4e;font-weight:900;margin-top:3px;overflow-wrap:anywhere}
+.dash-stat small{font-size:10px;color:#8a9aa2}
+.dash-chart-card,.dash-cost-card{background:#fff;border:1px solid #e6edef;border-radius:16px;padding:14px}
+.dash-chart{height:124px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:end;padding:8px 2px 0}
+.dash-day{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;min-width:0}
+.dash-day b{font-size:9px;color:#557080;font-weight:700;white-space:nowrap}
+.dash-bar-track{height:83px;width:100%;max-width:25px;background:#edf3f3;border-radius:7px 7px 3px 3px;display:flex;align-items:flex-end;overflow:hidden}
+.dash-bar{display:block;width:100%;min-height:3px;background:linear-gradient(180deg,#21ad91,#087c70);border-radius:7px 7px 2px 2px}
+.dash-day small{font-size:9px;color:#87969e}
+.dash-cost-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #edf1f2;font-size:12px;color:#536a77}
+.dash-cost-row:last-child{border:0}
+.dash-cost-row b{color:#203d4e;font-size:12px}
+.dash-cost-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#159780;margin-left:7px}
+.dash-empty{padding:20px 12px;text-align:center;color:#7e9099;font-size:12px;background:#fff;border:1px dashed #d8e3e6;border-radius:14px}
+.dash-foot{font-size:10px;color:#87969e;line-height:1.8;margin:12px 2px}
+@media(max-width:390px){.dash-profit{padding:17px}.dash-profit-value{font-size:29px}.dash-stats{gap:6px}.dash-stat{padding:10px 7px}.dash-stat b{font-size:16px}.dash-periods .period-btn{font-size:10px}}
+
 </style>
 </head>
 <body>
@@ -353,6 +413,46 @@ function renderSet(){
 function csv(rows,name){
  const b=new Blob(['\ufeff'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')],{type:'text/csv'});
  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}
+
+/* Dashboard v2: clearer hierarchy, live period filters and weekly activity */
+function renderDash(){
+ const today=nowD(),todayDate=new Date(today+'T12:00:00'),allDates=T.map(x=>x.d).concat(E.map(x=>x.d)).filter(Boolean).sort();
+ let from=today,to=today,label='اليوم';
+ if(dashPeriod==='week'){const x=new Date(todayDate);x.setDate(x.getDate()-6);from=nowDateString(x);label='آخر 7 أيام'}
+ else if(dashPeriod==='month'){from=today.slice(0,7)+'-01';label='الشهر الحالي'}
+ else if(dashPeriod==='year'){from=today.slice(0,4)+'-01-01';label='السنة الحالية'}
+ else if(dashPeriod==='custom'){from=dashFrom||allDates[0]||today;to=dashTo||today;label='الفترة المحددة'}
+ const trips=T.filter(x=>x.d>=from&&x.d<=to),expenses=E.filter(x=>x.d>=from&&x.d<=to),a=agg(trips,expenses);
+ const money=v=>f(v)+' <small>جنيه</small>';
+ const periods=[['today','اليوم'],['week','7 أيام'],['month','الشهر'],['year','السنة'],['custom','مخصص']];
+ const periodHtml=periods.map(([k,t])=>'<button class="period-btn '+(dashPeriod===k?'active':'')+'" data-period="'+k+'">'+t+'</button>').join('');
+ const costs=[['عمولة التطبيق',a.comm],['مصروفات فعلية',a.cash],['احتياطي الصيانة',a.prov]].filter(x=>x[1]>0);
+ const costHtml=costs.length?costs.map(([k,v])=>'<div class="dash-cost-row"><span><i class="dash-cost-dot"></i>'+k+'</span><b>'+money(v)+'</b></div>').join():'<div class="dash-empty">لا توجد تكاليف مسجلة في الفترة دي.</div>';
+ const days=[];for(let i=6;i>=0;i--){const dt=new Date(todayDate);dt.setDate(dt.getDate()-i);const ds=nowDateString(dt),dayTrips=T.filter(x=>x.d===ds),net=agg(dayTrips,E.filter(x=>x.d===ds)).net;days.push({ds,net,label:['أحد','اثن','ثلا','أرب','خمي','جمع','سبت'][dt.getDay()]})}
+ const max=Math.max(1,...days.map(x=>Math.max(0,x.net))),chart=days.map(x=>'<div class="dash-day"><b>'+f(Math.max(0,x.net))+'</b><div class="dash-bar-track"><i class="dash-bar" style="height:'+Math.max(3,Math.max(0,x.net)/max*100)+'%"></i></div><small>'+x.label+'</small></div>').join('');
+ const profitPct=a.rev>0?Math.max(0,Math.min(100,a.net/a.rev*100)):0;
+ return '<div class="dash-v2">'+
+ '<section class="dash-head"><div><span class="eyebrow">لوحة المتابعة</span><h2>أهلاً بيك</h2><p>ده ملخص شغلك في '+label+'</p></div><span class="dash-date">'+today+'</span></section>'+
+ '<section class="dash-periods">'+periodHtml+'</section>'+
+ (dashPeriod==='custom'?'<section class="dash-custom"><div><label for="dashFrom">من تاريخ</label><input type="date" id="dashFrom" value="'+from+'"></div><div><label for="dashTo">إلى تاريخ</label><input type="date" id="dashTo" value="'+to+'"></div></section>':'')+
+ '<section class="dash-profit"><div class="dash-profit-top"><span>صافي الربح</span><small>'+label+'</small></div><div class="dash-profit-value">'+money(a.net)+'</div><div class="dash-profit-note">بعد العمولة والمصروفات واحتياطي الصيانة</div><div class="dash-profit-metrics"><div><span>صافي لكل كم</span><b>'+f(a.pk,2)+' ج</b></div><div><span>صافي لكل ساعة</span><b>'+f(a.ph,1)+' ج</b></div><div><span>متوسط المشوار</span><b>'+f(a.aNet)+' ج</b></div></div></section>'+
+ '<section class="dash-actions-v2"><button class="add-trip" data-t="calc">＋ تسجيل مشوار</button><button class="add-exp" data-t="exp">＋ تسجيل مصروف</button></section>'+
+ '<section class="dash-section"><div class="dash-section-head"><h3>نشاطك</h3><span>'+label+'</span></div><div class="dash-stats"><div class="dash-stat"><span>المشاوير</span><b>'+f(a.N)+'</b><small>مشوار</small></div><div class="dash-stat"><span>المسافة</span><b>'+f(a.km,1)+'</b><small>كيلومتر</small></div><div class="dash-stat"><span>وقت القيادة</span><b>'+f(a.hr,1)+'</b><small>ساعة</small></div></div></section>'+
+ '<section class="dash-section"><div class="dash-section-head"><h3>حركة آخر 7 أيام</h3><span>صافي الربح اليومي</span></div><div class="dash-chart-card">'+(T.length?'<div class="dash-chart">'+chart+'</div>':'<div class="dash-empty">سجّل أول مشوار، وهتظهر حركة أرباحك هنا.</div>')+'</div></section>'+
+ '<section class="dash-section"><div class="dash-section-head"><h3>ملخص التكاليف</h3><span>نسبة الصافي '+f(profitPct,1)+'%</span></div><div class="dash-cost-card">'+costHtml+'</div></section>'+
+ '<p class="dash-foot">معلومة: احتياطي الصيانة تقديري، والمصروفات الفعلية بتتسجل وقت الدفع. الرسم يعرض صافي الربح اليومي لآخر 7 أيام.</p>'+
+ '</div>';
+}
+function nowDateString(dt){return dt.getFullYear()+'-'+p2(dt.getMonth()+1)+'-'+p2(dt.getDate())}
+const bindBeforeDashboardV2=bind;
+function bind(){
+ bindBeforeDashboardV2();
+ document.querySelectorAll('[data-period]').forEach(b=>b.onclick=()=>{dashPeriod=b.dataset.period;show()});
+ const df=$('dashFrom'),dt=$('dashTo');
+ if(df)df.onchange=()=>{dashFrom=df.value;if(dashTo&&dashTo<dashFrom)dashTo=dashFrom;show()};
+ if(dt)dt.onchange=()=>{dashTo=dt.value;if(dashFrom&&dashTo<dashFrom)dashFrom=dashTo;show()};
+}
+
 function show(){
  const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRep,set:renderSet};
  document.getElementById('m').innerHTML=(V[tab]||renderDash)();
