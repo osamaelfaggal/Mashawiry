@@ -810,7 +810,18 @@ bind=function(){_b4();const on=(id,fn)=>{const e=$(id);if(e)e.onclick=fn},del=(s
 /* الوضع الفاتح/الداكن */
 function applyTh(){if(document.documentElement)document.documentElement.dataset.theme=TH}
 applyTh();const hd=document.querySelector&&document.querySelector('header');
-if(hd){hd.style.position='relative';hd.insertAdjacentHTML('beforeend','<button id="thb" style="position:absolute;left:12px;top:12px;width:auto;margin:0;padding:6px 10px;background:rgba(255,255,255,.2)">🌓</button>');$('thb').onclick=()=>{TH=TH=='dark'?'light':'dark';sv('ind_th',TH);applyTh()}}
+if(hd){
+ hd.style.position='relative';
+ hd.insertAdjacentHTML('beforeend','<button type="button" id="thb" aria-label="تغيير المظهر" style="position:absolute;z-index:5;left:12px;top:12px;width:auto;min-height:36px;margin:0;padding:6px 10px;background:rgba(255,255,255,.2);color:#fff;border:1px solid #ffffff55;box-shadow:none">🌓</button>');
+ const themeButton=$('thb');
+ const syncThemeButton=()=>{themeButton.textContent=TH==='dark'?'☀️':'🌙';themeButton.setAttribute('aria-label',TH==='dark'?'التحويل للوضع الفاتح':'التحويل للوضع الداكن')};
+ syncThemeButton();
+ themeButton.addEventListener('click',e=>{
+  e.preventDefault();e.stopPropagation();
+  TH=document.documentElement.dataset.theme==='dark'?'light':'dark';
+  applyTh();sv('ind_th',TH);syncThemeButton();
+ });
+}
 show();
 </script>
 <script>
