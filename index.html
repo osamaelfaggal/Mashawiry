@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0f9d8f"><script>if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js")</script><title>حاسبة مشاويري</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#173f60"><script>if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js")</script><title>حاسبة مشاويري</title>
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--tx:#1c2733;--mu:#6b7785;--bd:#e1e6eb;--pr:#0f766e;--g:#16a34a;--y:#d97706;--r:#dc2626;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media all{:root:not([data-theme=light]){--bg:#10161c;--card:#1a232c;--tx:#e8eef3;--mu:#94a3b0;--bd:#2c3945;--pr:#0f9d8f}}
@@ -231,6 +231,12 @@ nav a.on{color:#173f60;font-weight:700}
 nav a.nav-add{flex:0 0 48px;width:48px;height:48px;margin-top:-22px;border-radius:50%;background:#173f60;color:white;box-shadow:0 4px 12px #173f6033;justify-content:center;border:3px solid #f3f7f8}
 nav a.nav-add b{font-size:25px;line-height:1}
 @media(min-width:700px){main{max-width:620px}.net-card,.dash-card{padding:18px}.dash-top h2{font-size:24px}}
+
+/* Reference palette overrides */
+:root:not([data-theme=light]){--bg:#f3f7fa;--card:#fff;--tx:#253746;--mu:#81909a;--bd:#e7edef;--pr:#153d5a;--g:#16844c;--r:#bd6262}
+body{background:#f3f7fa!important;color:#263845!important}
+header{background:#173f60!important;color:#fff!important}
+#nav a{cursor:pointer}
 </style>
 </head>
 <body>
@@ -242,7 +248,7 @@ const DEF={gasPrice:170,gasKm:130,oilCost:700,oilKm:2000,gasoline:500,monthKm:20
 const FIELDS=[['gasPrice','سعر تعبئة الغاز (جنيه)'],['gasKm','كم بتمشي بالتعبئة دي'],['oilCost','تكلفة تغيير الزيت (جنيه)'],['oilKm','كل كم بتغير الزيت'],['gasoline','مصروف البنزين الشهري (جنيه)'],['monthKm','إجمالي كم الشهر (للسيارة كلها)'],['maint','احتياطي صيانة لكل كم (جنيه)'],['comm','عمولة التطبيق %'],['days','أيام الشغل في الشهر'],['hours','ساعات الشغل يوميًا'],['target','هدف صافي الربح بالساعة (جنيه)'],['minH','أقل صافي ربح بالساعة مقبول (جنيه)'],['avgSpd','متوسط سرعتك مع الراكب (كم/س) - لتقدير المدة']];
 const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
 const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
-let S=Object.assign({},DEF,ld('ind_s',{})),T=ld('ind_t',[]),E=ld('ind_e',[]),I=ld('ind_i',{dist:'',dur:'',pick:'',spd:30,price:'',ret:''}),tab='calc',selM=null,cmpM=null;
+let S=Object.assign({},DEF,ld('ind_s',{})),T=ld('ind_t',[]),E=ld('ind_e',[]),I=ld('ind_i',{dist:'',dur:'',pick:'',spd:30,price:'',ret:''}),tab='dash',selM=null,cmpM=null;
 const n=v=>{v=parseFloat(v);return isFinite(v)&&v>=0?v:0};
 const f=(v,d=0)=>(+v).toLocaleString('ar-EG',{maximumFractionDigits:d,minimumFractionDigits:d});
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -348,9 +354,9 @@ function csv(rows,name){
  const b=new Blob(['\ufeff'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')],{type:'text/csv'});
  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}
 function show(){
- const V={calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRep,set:renderSet};
- document.getElementById('m').innerHTML=V[tab]();
- document.getElementById('nav').innerHTML=[['calc','🧮','حاسبة'],['log','🧾','المشاوير'],['exp','⛽','مصروفات'],['rep','📊','التقارير'],['set','⚙️','إعدادات']].map(([k,i,l])=>`<a href="#" data-t="${k}" class="${tab==k?'on':''}"><b>${i}</b>${l}</a>`).join('');
+ const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRep,set:renderSet};
+ document.getElementById('m').innerHTML=(V[tab]||renderDash)();
+ document.getElementById('nav').innerHTML=[['dash','▦','الرئيسية'],['log','◷','المشاوير'],['calc','＋',''],['exp','♧','المصروفات'],['rep','▥','التقارير']].map(([k,i,l])=>`<a href="#" data-t="${k}" class="${tab==k?'on':''} ${k==='calc'?'nav-add':''}"><b>${i}</b>${l}</a>`).join('');
  if(tab=='calc')renderRes();bind()}
 function bind(){
  document.querySelectorAll('[data-t]').forEach(a=>a.onclick=e=>{e.preventDefault();tab=a.dataset.t;show()});
