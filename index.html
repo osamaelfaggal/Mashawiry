@@ -427,7 +427,7 @@ function renderDash(){
  const periods=[['today','اليوم'],['week','7 أيام'],['month','الشهر'],['year','السنة'],['custom','مخصص']];
  const periodHtml=periods.map(([k,t])=>'<button class="period-btn '+(dashPeriod===k?'active':'')+'" data-period="'+k+'">'+t+'</button>').join('');
  const costs=[['عمولة التطبيق',a.comm],['مصروفات فعلية',a.cash],['احتياطي الصيانة',a.prov]].filter(x=>x[1]>0);
- const costHtml=costs.length?costs.map(([k,v])=>'<div class="dash-cost-row"><span><i class="dash-cost-dot"></i>'+k+'</span><b>'+money(v)+'</b></div>').join():'<div class="dash-empty">لا توجد تكاليف مسجلة في الفترة دي.</div>';
+ const costHtml=costs.length?costs.map(([k,v])=>'<div class="dash-cost-row"><span><i class="dash-cost-dot"></i>'+k+'</span><b>'+money(v)+'</b></div>').join(''):'<div class="dash-empty">لا توجد تكاليف مسجلة في الفترة دي.</div>';
  const days=[];for(let i=6;i>=0;i--){const dt=new Date(todayDate);dt.setDate(dt.getDate()-i);const ds=nowDateString(dt),dayTrips=T.filter(x=>x.d===ds),net=agg(dayTrips,E.filter(x=>x.d===ds)).net;days.push({ds,net,label:['أحد','اثن','ثلا','أرب','خمي','جمع','سبت'][dt.getDay()]})}
  const max=Math.max(1,...days.map(x=>Math.max(0,x.net))),chart=days.map(x=>'<div class="dash-day"><b>'+f(Math.max(0,x.net))+'</b><div class="dash-bar-track"><i class="dash-bar" style="height:'+Math.max(3,Math.max(0,x.net)/max*100)+'%"></i></div><small>'+x.label+'</small></div>').join('');
  const profitPct=a.rev>0?Math.max(0,Math.min(100,a.net/a.rev*100)):0;
@@ -444,9 +444,8 @@ function renderDash(){
  '</div>';
 }
 function nowDateString(dt){return dt.getFullYear()+'-'+p2(dt.getMonth()+1)+'-'+p2(dt.getDate())}
-const bindBeforeDashboardV2=bind;
 function bind(){
- bindBeforeDashboardV2();
+ bindLegacy();
  document.querySelectorAll('[data-period]').forEach(b=>b.onclick=()=>{dashPeriod=b.dataset.period;show()});
  const df=$('dashFrom'),dt=$('dashTo');
  if(df)df.onchange=()=>{dashFrom=df.value;if(dashTo&&dashTo<dashFrom)dashTo=dashFrom;show()};
@@ -458,7 +457,7 @@ function show(){
  document.getElementById('m').innerHTML=(V[tab]||renderDash)();
  document.getElementById('nav').innerHTML=[['dash','▦','الرئيسية'],['log','◷','المشاوير'],['calc','＋',''],['exp','♧','المصروفات'],['rep','▥','التقارير']].map(([k,i,l])=>`<a href="#" data-t="${k}" class="${tab==k?'on':''} ${k==='calc'?'nav-add':''}"><b>${i}</b>${l}</a>`).join('');
  if(tab=='calc')renderRes();bind()}
-function bind(){
+function bindLegacy(){
  document.querySelectorAll('[data-t]').forEach(a=>a.onclick=e=>{e.preventDefault();tab=a.dataset.t;show()});
  ['dist','dur','pick','spd','price','ret'].forEach(k=>{const el=document.getElementById(k);if(el)el.oninput=()=>{I[k]=el.value;sv('ind_i',I);renderRes()}});
  const cl=document.getElementById('clr');if(cl)cl.onclick=()=>{I={dist:'',dur:'',pick:'',spd:I.spd||30,price:'',ret:''};sv('ind_i',I);show()};document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{I.pick=b.dataset.p;sv('ind_i',I);show()});document.querySelectorAll('[data-pp]').forEach(b=>b.onclick=()=>{I.price=Math.max(0,n(I.price)+ +b.dataset.pp);sv('ind_i',I);show()});
