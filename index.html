@@ -860,11 +860,11 @@ function renderRepV2(){
  const money=v=>f(v)+' <small>جنيه</small>';
  const daysInMonth=new Date(+m.slice(0,4),+m.slice(5,7),0).getDate();
  const daily=Array.from({length:daysInMonth},(_,i)=>{const d=m+'-'+p2(i+1),tt=t.filter(x=>x.d===d),ee=e.filter(x=>x.d===d);return{d,net:agg(tt,ee).net,rev:sum(tt,'rev')}});
- const expenseMap={};e.forEach(x=>expenseMap[x.t]=(expenseMap[x.t]||0)+n(x.a));
- expenseMap['عمولة التطبيق']=(expenseMap['عمولة التطبيق']||0)+a.comm;
- expenseMap['احتياطي الصيانة']=(expenseMap['احتياطي الصيانة']||0)+a.prov;
+ const expenseMap={'عمولة التطبيق':a.comm,'وقود وزيت (استهلاك)':a.cons,'احتياطي الصيانة':a.acc,'مصروفات أخرى':a.oth};
+ 
+ 
  const cats=Object.entries(expenseMap).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
- const colors={'غاز':'#2496c7','بنزين':'#e49a27','زيت':'#8b70c8','صيانة':'#e16b58','إصلاح':'#d34d67','أخرى':'#8295a4','عمولة التطبيق':'#0d9b72','احتياطي الصيانة':'#20a486'};const colorFor=k=>colors[k]||'#8295a4';
+ const colors={'غاز':'#2496c7','بنزين':'#e49a27','زيت':'#8b70c8','صيانة':'#e16b58','إصلاح':'#d34d67','أخرى':'#8295a4','عمولة التطبيق':'#0d9b72','احتياطي الصيانة':'#20a486','وقود وزيت (استهلاك)':'#2496c7'};const colorFor=k=>colors[k]||'#8295a4';
  const totalCosts=cats.reduce((z,x)=>z+x[1],0);
  let cursor=0;const slices=cats.map(([name,val])=>{const start=cursor;cursor+=totalCosts?val/totalCosts*100:0;return colorFor(name)+' '+start+'% '+cursor+'%'}).join(',');
  const donutStyle=totalCosts?'background:conic-gradient('+slices+')':'background:#eaf0f3';
@@ -880,27 +880,52 @@ function renderRepV2(){
  const best=H[0],weak=H.length?H[H.length-1]:null,goodPct=a.N? a.good/a.N*100:0;
  const prev=ms[ms.indexOf(m)+1]?agg(T.filter(x=>mon(x.d)==ms[ms.indexOf(m)+1]),E.filter(x=>mon(x.d)==ms[ms.indexOf(m)+1])):null;
  const compareMonth=cmpM&&ms.includes(cmpM)?cmpM:(ms[1]||m),compare=agg(T.filter(x=>mon(x.d)==compareMonth),E.filter(x=>mon(x.d)==compareMonth));
- const compareRows=[['صافي الربح',a.net,compare.net],['الإيرادات',a.rev,compare.rev],['التكاليف',totalCosts,compare.cash+compare.comm+compare.prov],['عدد المشاوير',a.N,compare.N],['المسافة',a.km,compare.km]];
+ const compareRows=[['صافي الربح',a.net,compare.net],['الإيرادات',a.rev,compare.rev],['التكاليف',totalCosts,compare.comm+compare.econ],['عدد المشاوير',a.N,compare.N],['المسافة',a.km,compare.km]];
  const compareHtml=compareRows.map(([label,v1,v2])=>{const diff=v1-v2,pct=v2?diff/Math.abs(v2)*100:null;return '<div class="report-compare-item"><small>'+label+'</small><b>'+f(v1,label==='المسافة'?1:0)+(label==='المسافة'?' كم':label==='عدد المشاوير'?' رحلة':' جنيه')+'</b><em style="color:'+(diff>=0?'#07835e':'#d34d59')+'">'+(pct===null?'لا توجد بيانات للمقارنة':(diff>=0?'▲ ':'▼ ')+f(Math.abs(pct),1)+'% مقارنة بالشهر الآخر')+'</em></div>'}).join('');
  const delta=prev&&prev.net!==0?(a.net-prev.net)/Math.abs(prev.net)*100:null;
  const insight=a.N?'<div class="report-insight">'+(best?'أفضل فترة مسجلة: <b>'+best.k+':00</b> بصافي '+f(best.ph)+' جنيه/ساعة. ':'')+(weak&&weak.k!==best?.k?'أقل وقت أداءً: '+weak.k+':00. ':'')+'نسبة المشاوير اللي حققت هدفك <b>'+f(goodPct,0)+'%</b>.</div>':'<div class="report-insight">ابدأ بتسجيل مشاويرك، وهنا هتلاقي تحليل أدائك الشهري.</div>';
  const kpi=(title,value,sub)=>{const kind=title.includes('الإيرادات')?'income':title.includes('صافي')?'profit':title.includes('التكاليف')?'cost':'trips';return '<div class="report-kpi '+kind+'"><small>'+title+'</small><strong>'+value+'</strong><em>'+sub+'</em></div>'};
  let out='<div class="report-shell"><div class="report-toolbar"><div><h2>التقرير المالي</h2><p>نظرة شاملة على أداء مشاويرك</p></div><select id="sm" aria-label="اختيار الشهر">'+ms.map(x=>'<option value="'+x+'" '+(x===m?'selected':'')+'>'+x+'</option>').join('')+'</select></div>'+
- '<div class="report-kpis">'+kpi('إجمالي الإيرادات',money(a.rev),'قبل خصم العمولة',false)+kpi('صافي الربح',money(a.net),'بعد التكاليف المسجلة والاحتياطي',true)+kpi('إجمالي التكاليف',money(totalCosts),'عمولة + مصروفات + احتياطي',false)+kpi('عدد المشاوير',f(a.N),'خلال الشهر',false)+'</div>'+
- '<div class="report-panels"><section class="report-panel"><div class="report-panel-head"><h3>المصروفات حسب النوع</h3><span>جنيه</span></div>'+bars+'</section>'+
+ '<div class="report-kpis">'+kpi('إجمالي الإيرادات',money(a.rev),'قبل خصم العمولة',false)+kpi('صافي الربح',money(a.net),'بعد التكاليف المسجلة والاحتياطي',true)+kpi('إجمالي التكاليف',money(totalCosts),'عمولة + استهلاك الوقود والزيت + احتياطي الصيانة + أخرى',false)+kpi('عدد المشاوير',f(a.N),'خلال الشهر',false)+'</div>'+
+ '<div class="report-panels"><section class="report-panel"><div class="report-panel-head"><h3>التكاليف حسب النوع</h3><span>جنيه</span></div>'+bars+'</section>'+
  '<section class="report-panel"><div class="report-panel-head"><h3>توزيع التكاليف حسب النوع</h3><span>النسبة من الإجمالي</span></div><div class="report-donut-wrap"><div class="report-donut" style="'+donutStyle+'"><div class="report-donut-center"><span>إجمالي التكاليف</span><b>'+f(totalCosts,0)+'</b><span>جنيه</span></div></div><div class="report-legend">'+legend+'</div></div></section>'+
  '<section class="report-panel wide"><div class="report-panel-head"><h3>حركة صافي الربح</h3><span>يوميًا · '+monthLabel+'</span></div>'+trend+'</section></div>'+
  '<div class="report-two"><section class="report-panel"><div class="report-panel-head"><h3>مؤشرات التشغيل</h3><span>خلال الشهر</span></div><div class="report-list">'+
- '<div class="report-list-row"><span>إجمالي المسافة</span><b>'+f(a.km,1)+' كم</b></div><div class="report-list-row"><span>مدة الرحلات المسجلة</span><b>'+f(a.hr,1)+' ساعة</b></div><div class="report-list-row"><span>متوسط الإيراد لكل رحلة</span><b>'+f(a.aRev)+' جنيه</b></div><div class="report-list-row"><span>صافي الربح لكل ساعة</span><b>'+f(a.ph)+' جنيه</b></div><div class="report-list-row"><span>صافي الربح لكل كيلومتر</span><b>'+f(a.pk,2)+' جنيه</b></div><div class="report-list-row"><span>تكلفة التشغيل التقديرية</span><b>'+f(a.est)+' جنيه</b></div></div></section>'+
+ '<div class="report-list-row"><span>إجمالي المسافة</span><b>'+f(a.km,1)+' كم</b></div><div class="report-list-row"><span>مدة الرحلات المسجلة</span><b>'+f(a.hr,1)+' ساعة</b></div><div class="report-list-row"><span>متوسط الإيراد لكل رحلة</span><b>'+f(a.aRev)+' جنيه</b></div><div class="report-list-row"><span>صافي الربح لكل ساعة</span><b>'+f(a.ph)+' جنيه</b></div><div class="report-list-row"><span>صافي الربح لكل كيلومتر</span><b>'+f(a.pkm,2)+' جنيه</b></div><div class="report-list-row"><span>تكلفة التشغيل التقديرية</span><b>'+f(a.est)+' جنيه</b></div></div></section>'+
  '<section class="report-panel"><div class="report-panel-head"><h3>تقييم الأداء</h3><span>مقارنة بهدفك</span></div><div class="report-list-row"><span>مشاوير حققت الهدف</span><b>'+f(a.good)+' من '+f(a.N)+'</b></div><div class="report-progress"><i style="width:'+goodPct+'%"></i></div>'+insight+(prev?'<div class="report-list-row"><span>مقارنة بالشهر السابق</span><b class="'+(delta>=0?'pos':'neg')+'">'+(delta>=0?'+':'')+f(delta,1)+'%</b></div>':'')+'</section></div>'+
  '<section class="report-panel"><div class="report-panel-head"><h3>أفضل أوقات العمل</h3><span>صافي تقديري لكل ساعة</span></div>'+tbl(H.slice(0,5),x=>x+':00')+'</section>'+
  '<section class="report-panel"><div class="report-panel-head"><h3>تحليل الرحلات</h3><span>حسب المسافة وقيمة الرحلة</span></div><div class="report-two"><div><b style="font-size:12px">حسب المسافة</b>'+tbl(Dk,k=>DL[k])+'</div><div><b style="font-size:12px">حسب قيمة الرحلة</b>'+tbl(F,k=>FL[k])+'</div></div></section>'+
  '<section class="report-panel"><div class="report-panel-head"><h3>مقارنة بين الشهور</h3><span>قارن الشهر الحالي بشهر آخر</span></div><select id="cm" style="max-width:220px;margin-bottom:10px">'+ms.map(x=>'<option value="'+x+'" '+(x===compareMonth?'selected':'')+'>'+x+'</option>').join('')+'</select><div class="report-compare-grid">'+compareHtml+'</div></section>'+
- '<p class="report-note">صافي الربح = الإيرادات − عمولة التطبيق − المصروفات النقدية الفعلية − احتياطي الصيانة. احتياطي الصيانة تقديري، ويُخصم منه ما تم تسجيله كصيانة أو إصلاح لتجنب الخصم المزدوج. تكلفة التشغيل التقديرية للمقارنة فقط ولا تُخصم مرة أخرى.</p>'+
- '<div class="report-actions"><button class="s" id="exT">تصدير المشاوير</button><button class="s" id="exE">تصدير المصروفات</button></div></div>';
+ '<p class="report-note">صافي الربح = الإيرادات − عمولة التطبيق − استهلاك الوقود والزيت (كم × معدل فعلي من العداد أو من الإعدادات) − استحقاق صيانة − مصروفات أخرى. المصروفات النقدية (مشتريات الغاز والبنزين مثلًا) بتظهر في الربح النقدي بس، والصيانة والإصلاح الفعلي بيتسحبوا من صندوق الصيانة فمفيش خصم مزدوج.</p>'+
+ '</div>';
  return out;
 }
 
 const _bindIntegrated=bind;bind=function(){_bindIntegrated();document.querySelectorAll('[data-period]').forEach(b=>b.onclick=()=>{dashPeriod=b.dataset.period;if(dashPeriod==='custom'){dashFrom=dashFrom||nowD();dashTo=dashTo||nowD()}show()});const df=$('dashFrom'),dt=$('dashTo');if(df)df.onchange=()=>{dashFrom=df.value;if(dashTo&&dashFrom>dashTo)dashTo=dashFrom;show()};if(dt)dt.onchange=()=>{dashTo=dt.value;if(dashFrom&&dashTo<dashFrom)dashFrom=dashTo;show()};const fd=$('finishDay');if(fd)fd.onclick=()=>{dashPeriod='today';show()}};
-function show(){const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRepV2,set:renderSet};$('m').innerHTML=V[tab]();$('nav').innerHTML=[['dash','▦','الرئيسية'],['log','◷','المشاوير'],['calc','＋',''],['exp','♧','المصروفات'],['rep','▥','التقارير']].map(([k,i,l])=>'<a href="#" data-t="'+k+'" class="'+(tab==k?'on':'')+' '+(k==='calc'?'nav-add':'')+'"><b>'+i+'</b>'+l+'</a>').join('');if(tab==='calc')renderRes();bind()}show();</script></body>
+function show(){const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRepV2,set:renderSet};$('m').innerHTML=V[tab]();$('nav').innerHTML=[['dash','▦','الرئيسية'],['log','◷','المشاوير'],['calc','＋',''],['exp','♧','المصروفات'],['rep','▥','التقارير']].map(([k,i,l])=>'<a href="#" data-t="'+k+'" class="'+(tab==k?'on':'')+' '+(k==='calc'?'nav-add':'')+'"><b>'+i+'</b>'+l+'</a>').join('');if(tab==='calc')renderRes();bind()}show();</script><script>
+/* v6: إصلاح التقرير + إرجاع الميزات الناقصة */
+const _dash5=renderDash,_rep5=renderRepV2;
+renderDash=function(){
+ const d=nowD(),m=d.slice(0,7),ms=months(),b=mAgg(m),pv=ms[ms.indexOf(m)+1]?mAgg(ms[ms.indexOf(m)+1]):null,op=SH.find(x=>!x.e),F=fund(),mn=ld('ind_mn',null),lk=Math.max(0,...E.map(x=>+x.k||0)),td=SH.filter(x=>dOf(x.s)==d).reduce((s,x)=>s+((x.e||Date.now())-x.s)/60000,0);
+ const extra=alHtml(alerts(b,pv))+(mn?`<section class="dash-card note">اتعمل ترحيل لبياناتك القديمة: العمولة (${f(mn.c,1)}%) واحتياطي الصيانة (${f(mn.m,2)} ج/كم) اتطبقوا على المشاوير القديمة بأثر رجعي.<button class="s" id="mnok">تمام</button></section>`:'')+
+ `<section class="dash-card"><div class="dash-section-title"><h3>الوردية والتسجيل السريع</h3></div>`+(op?`<button class="d" id="shE">⏹ إنهاء الوردية (بدأت ${tOf(op.s)})</button>`:'<button class="s" id="shS">▶ بدء وردية</button>')+`<div class="note">ورديات النهاردة: ${hm(td)}</div><div class="row">${inp('q_a','المبلغ (جنيه)','')}${inp('q_k','قراءة العداد',lk||'')}</div><div class="chips">${DB.map(c=>`<button class="s ch" data-q="${c}">${c}</button>`).join('')}</div></section>`;
+ const h=_dash5(),i=h.indexOf('<section class="net-card">');
+ return(i<0?extra+h:h.slice(0,i)+extra+h.slice(i))+`<section class="dash-card"><div class="dash-section-title"><h3>صندوق الصيانة التراكمي</h3></div><div class="grid">${K('مستحق',f(F.ac)+' ج')}${K('مصروف فعلي',f(F.sp)+' ج')}${K('الرصيد',f(F.bal)+' ج',F.bal>=0?'pos':'neg')}</div></section>`};
+function extraRep(){
+ const m=selM||nowD().slice(0,7),ms=months(),t=T.filter(x=>mon(x.d)==m),r=mAgg(m),pv=ms[ms.indexOf(m)+1]?mAgg(ms[ms.indexOf(m)+1]):null,R=rates(),F=fund(),
+ W=grp(t,x=>new Date(x.d+'T12:00').getDay()).sort((a,b)=>b.ph-a.ph),Dp=grp(t,x=>bk(x.dist||0,[3,6,10])).sort((a,b)=>a.k-b.k),Dk=grp(t,x=>bk(x.km,[5,10,20])).sort((a,b)=>a.k-b.k),
+ asc=[...ms].reverse().slice(-6),A=asc.map(mAgg),L=asc.map(x=>x.slice(2)),P=(ti,body)=>`<section class="report-panel"><div class="report-panel-head"><h3>${ti}</h3></div>${body}</section>`,src=s=>s?'فعلي من العداد':'من الإعدادات';
+ return'<div class="report-shell" style="margin-top:12px">'+alHtml(alerts(r,pv))+
+ P('💰 الربح النقدي مقابل الربح بعد الاستهلاك',sg(r)+note1)+
+ P('⛽ تكلفة التشغيل لكل كم',`<div class="grid">${K('وقود وزيت/كم',f(r.km?r.cons/r.km:0,2)+' ج')}${K('صيانة/كم',f(r.km?r.acc/r.km:0,2)+' ج')}${K('إجمالي/كم',f(r.km?r.econ/r.km:0,2)+' ج')}</div><div class="note">غاز ${src(R.sg)} (${f(R.g,2)}) • بنزين ${src(R.sb)} (${f(R.b,2)}) • زيت ${src(R.so)} (${f(R.o,2)}) • رصيد صندوق الصيانة ${f(F.bal)} ج</div>`)+
+ P('🕒 وقت الانتظار والاستغلال',r.wm>0?`<div class="grid">${K('ساعات الورديات',hm(r.wm))}${K('وقت المشاوير',hm(r.min))}${K('وقت فاضي/انتظار',hm(Math.max(0,r.wm-r.min)))}${K('نسبة الاستغلال',f(r.min/r.wm*100)+'%')}</div>`:'<p class="note">سجّل ورديات من الرئيسية (بدء/إنهاء وردية) عشان يظهر الاستغلال.</p>')+
+ P('📆 حسب يوم الأسبوع',tbl(W,k=>DN[k]))+
+ P('📏 مسافة الراكب مقابل كم التشغيل',`<b style="font-size:12px">حسب مسافة الراكب</b>`+tbl(Dp,k=>PL[k])+`<b style="font-size:12px">حسب إجمالي كم التشغيل</b>`+tbl(Dk,k=>DL[k])+`<div class="note">كم الراكب ${f(r.ds,1)} من ${f(r.km,1)} كم تشغيل — كم فاضي (وصول/رجوع): ${f(r.km?(r.pks+r.rts)/r.km*100:0)}%</div>`)+
+ P('📈 تطور الشهور',bars('الإيرادات',A.map(a=>a.rev),L,'#16a34a')+bars('الربح النقدي',A.map(a=>a.cashP),L,'#d97706')+bars('الربح بعد الاستهلاك',A.map(a=>a.net),L,'#0f9d8f')+bars('كم التشغيل',A.map(a=>a.km),L,'#6b7785'))+
+ P('⬇️ تصدير (CSV يفتح في Excel)','<button class="s" id="xm">تقرير الشهر</button><button class="s" id="xa">ملخص كل الشهور</button><button class="s" id="xt">كل المشاوير</button><button class="s" id="xe">كل المصروفات</button><button class="s" id="xs">الورديات</button>')+'</div>'}
+renderRepV2=function(){return _rep5()+extraRep()};
+function show(){const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRepV2,set:renderSet};$('m').innerHTML=V[tab]();$('nav').innerHTML=[['dash','▦','الرئيسية'],['log','◷','المشاوير'],['calc','＋',''],['exp','♧','المصروفات'],['rep','▥','التقارير'],['set','⚙','إعدادات']].map(([k,i,l])=>'<a href="#" data-t="'+k+'" class="'+(tab==k?'on':'')+' '+(k==='calc'?'nav-add':'')+'"><b>'+i+'</b>'+l+'</a>').join('');if(tab==='calc')renderRes();bind()}
+show();
+</script>
+</body>
 </html>
