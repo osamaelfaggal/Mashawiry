@@ -297,6 +297,70 @@ main{max-width:780px!important;padding:18px 15px 30px!important}
 .dash-foot{font-size:10px;color:#87969e;line-height:1.8;margin:12px 2px}
 @media(max-width:390px){.dash-profit{padding:17px}.dash-profit-value{font-size:29px}.dash-stats{gap:6px}.dash-stat{padding:10px 7px}.dash-stat b{font-size:16px}.dash-periods .period-btn{font-size:10px}}
 
+
+/* Executive report dashboard inspired by the supplied reference */
+.report-shell{direction:rtl;max-width:100%;color:var(--tx)}
+.report-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 15px}
+.report-toolbar h2{font-size:21px;margin:0;font-weight:900}
+.report-toolbar p{font-size:11px;color:var(--mu);margin:3px 0 0}
+.report-toolbar select{width:auto;min-width:125px;max-width:48%;font-size:13px;padding:9px 11px}
+.report-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:12px}
+.report-kpi{background:var(--card);border:1px solid var(--bd);border-radius:15px;padding:13px;min-width:0;position:relative;overflow:hidden}
+.report-kpi small{display:block;font-size:10px;color:var(--mu);margin-bottom:5px}
+.report-kpi strong{font-size:21px;line-height:1.35;font-weight:900;display:block;overflow-wrap:anywhere}
+.report-kpi em{font-size:10px;color:var(--mu);font-style:normal}
+.report-kpi.primary{background:#08784f;color:#fff;border-color:#08784f}
+.report-kpi.primary small,.report-kpi.primary em{color:#d1f1df}
+.report-kpi .kpi-mark{position:absolute;left:12px;top:12px;font-size:19px;opacity:.3}
+.report-panels{display:grid;grid-template-columns:1fr;gap:11px}
+.report-panel{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:11px;min-width:0}
+.report-panel-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.report-panel-head h3{font-size:14px;font-weight:900;margin:0}
+.report-panel-head span{font-size:10px;color:var(--mu)}
+.report-bars{height:165px;display:flex;align-items:stretch;gap:7px;padding:8px 2px 0}
+.report-bar-col{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
+.report-bar-val{font-size:9px;color:var(--mu);white-space:nowrap}
+.report-bar-bg{height:112px;width:min(100%,27px);background:color-mix(in srgb,var(--bd) 55%,transparent);border-radius:7px 7px 3px 3px;display:flex;align-items:flex-end;overflow:hidden}
+.report-bar-fill{display:block;width:100%;min-height:2px;background:linear-gradient(180deg,#16a36a,#08784f);border-radius:7px 7px 2px 2px}
+.report-bar-lab{font-size:9px;color:var(--mu);white-space:nowrap}
+.report-trend{width:100%;height:auto;display:block;overflow:visible}
+.report-trend-label{font-size:9px;fill:var(--mu)}
+.report-donut-wrap{display:flex;align-items:center;gap:16px;justify-content:center;min-height:160px}
+.report-donut{width:142px;height:142px;border-radius:50%;position:relative;flex:none}
+.report-donut:after{content:"";position:absolute;inset:29px;background:var(--card);border-radius:50%}
+.report-donut-center{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;font-size:10px;color:var(--mu)}
+.report-donut-center b{font-size:16px;color:var(--tx)}
+.report-legend{display:flex;flex-direction:column;gap:10px;min-width:0}
+.report-legend-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--mu)}
+.report-legend-row b{display:block;color:var(--tx);font-size:12px}
+.report-dot{width:9px;height:9px;border-radius:3px;flex:none}
+.report-list{display:flex;flex-direction:column;gap:0}
+.report-list-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd);font-size:12px}
+.report-list-row:last-child{border-bottom:0}
+.report-list-row span{color:var(--mu)}
+.report-list-row b{font-size:12px}
+.report-progress{height:6px;border-radius:10px;background:var(--bd);overflow:hidden;margin-top:5px}
+.report-progress i{display:block;height:100%;border-radius:10px;background:#159766}
+.report-insight{border-radius:12px;background:color-mix(in srgb,#12845e 10%,var(--card));padding:11px 12px;font-size:12px;line-height:1.8;margin:8px 0}
+.report-insight b{color:#159766}
+.report-two{display:grid;grid-template-columns:1fr;gap:11px}
+.report-actions{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 20px}
+.report-actions button{width:auto;flex:1;min-width:110px;margin:0;padding:10px 12px;font-size:12px}
+.report-actions button.s{border:1px solid var(--bd)}
+.report-note{font-size:10px;line-height:1.8;color:var(--mu);margin:9px 2px 14px}
+@media(min-width:650px){
+ .report-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .report-panels{grid-template-columns:1.3fr .9fr;align-items:stretch}
+ .report-panel.wide{grid-column:1/-1}
+ .report-two{grid-template-columns:1fr 1fr}
+ .report-kpi strong{font-size:23px}
+}
+@media(max-width:370px){
+ .report-kpi{padding:10px}.report-kpi strong{font-size:18px}
+ .report-donut-wrap{gap:10px}.report-donut{width:118px;height:118px}
+ .report-donut:after{inset:25px}.report-legend-row{font-size:10px}
+}
+
 </style>
 </head>
 <body>
@@ -450,6 +514,52 @@ function bind(){
  const df=$('dashFrom'),dt=$('dashTo');
  if(df)df.onchange=()=>{dashFrom=df.value;if(dashTo&&dashTo<dashFrom)dashTo=dashFrom;show()};
  if(dt)dt.onchange=()=>{dashTo=dt.value;if(dashFrom&&dashTo<dashFrom)dashFrom=dashTo;show()};
+}
+
+
+/* Professional monthly report dashboard */
+function renderRep(){
+ const ms=months();selM=selM&&ms.includes(selM)?selM:ms[0];const m=selM||nowD().slice(0,7);
+ const t=T.filter(x=>mon(x.d)==m),e=E.filter(x=>mon(x.d)==m),a=agg(t,e),c=Math.min(n(S.comm),99)/100;
+ const monthLabel=m;
+ const money=v=>f(v)+' <small>جنيه</small>';
+ const daysInMonth=new Date(+m.slice(0,4),+m.slice(5,7),0).getDate();
+ const daily=Array.from({length:daysInMonth},(_,i)=>{const d=m+'-'+p2(i+1),tt=t.filter(x=>x.d===d),ee=e.filter(x=>x.d===d);return{d,net:agg(tt,ee).net,rev:sum(tt,'rev')}});
+ const expenseMap={};e.forEach(x=>expenseMap[x.t]=(expenseMap[x.t]||0)+n(x.a));
+ expenseMap['عمولة التطبيق']=(expenseMap['عمولة التطبيق']||0)+a.comm;
+ expenseMap['احتياطي الصيانة']=(expenseMap['احتياطي الصيانة']||0)+a.prov;
+ const cats=Object.entries(expenseMap).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
+ const palette=['#08784f','#16a36a','#75b798','#d5a441','#6286a0','#9a86b8','#c17b67'];
+ const totalCosts=cats.reduce((z,x)=>z+x[1],0);
+ let cursor=0;const slices=cats.map((x,i)=>{const start=cursor;cursor+=totalCosts?x[1]/totalCosts*100:0;return palette[i%palette.length]+' '+start+'% '+cursor+'%'}).join(',');
+ const donutStyle=totalCosts?'background:conic-gradient('+slices+')':'background:var(--bd)';
+ const legend=cats.length?cats.map(([name,val],i)=>'<div class="report-legend-row"><i class="report-dot" style="background:'+palette[i%palette.length]+'"></i><div>'+esc(name)+'<b>'+money(val)+'</b></div></div>').join(''):'<span class="report-note">لا توجد مصروفات مسجلة.</span>';
+ const barsMax=Math.max(1,...cats.map(x=>x[1]));
+ const bars=cats.length?'<div class="report-bars">'+cats.map(([name,val])=>'<div class="report-bar-col"><span class="report-bar-val">'+f(val,0)+'</span><div class="report-bar-bg"><i class="report-bar-fill" style="height:'+Math.max(2,val/barsMax*100)+'%"></i></div><span class="report-bar-lab">'+esc(name)+'</span></div>').join('')+'</div>':'<div class="report-note">سجّل المصروفات عشان يظهر تحليلها هنا.</div>';
+ const activeDays=daily.filter(x=>x.rev>0),maxDay=Math.max(1,...activeDays.map(x=>Math.max(0,x.net))),w=620,h=180,pad=22;
+ const points=activeDays.map((x,i)=>({x:pad+(activeDays.length<=1?0:i/(activeDays.length-1)*(w-pad*2)),y:h-pad-(Math.max(0,x.net)/maxDay)*(h-pad*2),...x}));
+ const line=points.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');
+ const area=points.length?line+' L '+points[points.length-1].x+' '+(h-pad)+' L '+points[0].x+' '+(h-pad)+' Z':'';
+ const trend=points.length?'<svg class="report-trend" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="منحنى صافي الربح اليومي"><defs><linearGradient id="reportArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#159766" stop-opacity=".25"/><stop offset="100%" stop-color="#159766" stop-opacity="0"/></linearGradient></defs>'+[.25,.5,.75].map(v=>'<line x1="'+pad+'" x2="'+(w-pad)+'" y1="'+(pad+(h-pad*2)*v)+'" y2="'+(pad+(h-pad*2)*v)+'" stroke="var(--bd)" stroke-dasharray="3 4"/>').join('')+'<path d="'+area+'" fill="url(#reportArea)"/><path d="'+line+'" fill="none" stroke="#159766" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+points.map(p=>'<circle cx="'+p.x+'" cy="'+p.y+'" r="4" fill="#fff" stroke="#08784f" stroke-width="2"><title>'+p.d+': '+f(p.net)+' جنيه</title></circle>').join('')+'<text x="'+pad+'" y="'+(h-4)+'" class="report-trend-label">'+(points[0].d.slice(-2))+'</text><text x="'+(w-pad)+'" y="'+(h-4)+'" text-anchor="end" class="report-trend-label">'+(points[points.length-1].d.slice(-2))+'</text></svg>':'<div class="report-note">لا توجد مشاوير مسجلة خلال الشهر.</div>';
+ const H=grp(t,x=>x.h,c).sort((x,y)=>y.ph-x.ph),Dk=grp(t,x=>bk(x.km,[5,10,20]),c).sort((x,y)=>x.k-y.k),F=grp(t,x=>bk(x.rev,[40,70,100]),c).sort((x,y)=>x.k-y.k);
+ const best=H[0],weak=H.length?H[H.length-1]:null,goodPct=a.N? a.good/a.N*100:0;
+ const prev=ms[ms.indexOf(m)+1]?agg(T.filter(x=>mon(x.d)==ms[ms.indexOf(m)+1]),E.filter(x=>mon(x.d)==ms[ms.indexOf(m)+1])):null;
+ const delta=prev&&prev.net!==0?(a.net-prev.net)/Math.abs(prev.net)*100:null;
+ const insight=a.N?'<div class="report-insight">'+(best?'أفضل وقت ليك: <b>'+best.k+':00</b> بصافي '+f(best.ph)+' جنيه/ساعة. ':'')+(weak&&weak.k!==best?.k?'أقل وقت أداءً: '+weak.k+':00. ':'')+'نسبة المشاوير اللي حققت هدفك <b>'+f(goodPct,0)+'%</b>.</div>':'<div class="report-insight">ابدأ بتسجيل مشاويرك، وهنا هتلاقي تحليل أدائك الشهري.</div>';
+ const kpi=(title,value,sub,primary)=>'<div class="report-kpi '+(primary?'primary':'')+'"><small>'+title+'</small><strong>'+value+'</strong><em>'+sub+'</em></div>';
+ let out='<div class="report-shell"><div class="report-toolbar"><div><h2>التقرير المالي</h2><p>نظرة شاملة على أداء مشاويرك</p></div><select id="sm" aria-label="اختيار الشهر">'+ms.map(x=>'<option value="'+x+'" '+(x===m?'selected':'')+'>'+x+'</option>').join('')+'</select></div>'+
+ '<div class="report-kpis">'+kpi('إجمالي الإيرادات',money(a.rev),'قبل خصم العمولة',false)+kpi('صافي الربح',money(a.net),'بعد التكاليف المسجلة والاحتياطي',true)+kpi('إجمالي التكاليف',money(totalCosts),'عمولة + مصروفات + احتياطي',false)+kpi('عدد المشاوير',f(a.N),'خلال الشهر',false)+'</div>'+
+ '<div class="report-panels"><section class="report-panel"><div class="report-panel-head"><h3>المصروفات حسب النوع</h3><span>جنيه</span></div>'+bars+'</section>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>توزيع التكاليف</h3><span>النسبة من الإجمالي</span></div><div class="report-donut-wrap"><div class="report-donut" style="'+donutStyle+'"><div class="report-donut-center"><span>إجمالي التكاليف</span><b>'+f(totalCosts,0)+'</b><span>جنيه</span></div></div><div class="report-legend">'+legend+'</div></div></section>'+
+ '<section class="report-panel wide"><div class="report-panel-head"><h3>حركة صافي الربح</h3><span>يوميًا · '+monthLabel+'</span></div>'+trend+'</section></div>'+
+ '<div class="report-two"><section class="report-panel"><div class="report-panel-head"><h3>مؤشرات التشغيل</h3><span>خلال الشهر</span></div><div class="report-list">'+
+ '<div class="report-list-row"><span>إجمالي المسافة</span><b>'+f(a.km,1)+' كم</b></div><div class="report-list-row"><span>ساعات العمل المسجلة</span><b>'+f(a.hr,1)+' ساعة</b></div><div class="report-list-row"><span>متوسط الإيراد للمشوار</span><b>'+f(a.aRev)+' جنيه</b></div><div class="report-list-row"><span>صافي الربح لكل ساعة</span><b>'+f(a.ph)+' جنيه</b></div><div class="report-list-row"><span>صافي الربح لكل كم</span><b>'+f(a.pk,2)+' جنيه</b></div><div class="report-list-row"><span>تكلفة التشغيل التقديرية</span><b>'+f(a.est)+' جنيه</b></div></div></section>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>تقييم الأداء</h3><span>مقارنة بهدفك</span></div><div class="report-list-row"><span>مشاوير حققت الهدف</span><b>'+f(a.good)+' من '+f(a.N)+'</b></div><div class="report-progress"><i style="width:'+goodPct+'%"></i></div>'+insight+(prev?'<div class="report-list-row"><span>مقارنة بالشهر السابق</span><b class="'+(delta>=0?'pos':'neg')+'">'+(delta>=0?'+':'')+f(delta,1)+'%</b></div>':'')+'</section></div>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>أفضل أوقات العمل</h3><span>صافي تقديري لكل ساعة</span></div>'+tbl(H.slice(0,5),x=>x+':00')+'</section>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>تحليل المشاوير</h3><span>حسب المسافة وقيمة الرحلة</span></div><div class="report-two"><div><b style="font-size:12px">حسب المسافة</b>'+tbl(Dk,k=>DL[k])+'</div><div><b style="font-size:12px">حسب قيمة الرحلة</b>'+tbl(F,k=>FL[k])+'</div></div></section>'+
+ '<p class="report-note">صافي الربح = الإيرادات − عمولة التطبيق − المصروفات النقدية الفعلية − احتياطي الصيانة. احتياطي الصيانة تقديري، ويُخصم منه ما تم تسجيله كصيانة أو إصلاح لتجنب الخصم المزدوج. تكلفة التشغيل التقديرية للمقارنة فقط ولا تُخصم مرة أخرى.</p>'+
+ '<div class="report-actions"><button class="s" id="xm">تصدير التقرير</button><button class="s" id="xa">ملخص كل الشهور</button><button class="s" id="xt">تصدير المشاوير</button><button class="s" id="xe">تصدير المصروفات</button></div></div>';
+ return out;
 }
 
 function show(){
