@@ -519,7 +519,7 @@ function bind(){
 
 
 /* Professional monthly report dashboard */
-function renderRep(){
+function renderRepV2(){
  const ms=months();selM=selM&&ms.includes(selM)?selM:ms[0];const m=selM||nowD().slice(0,7);
  const t=T.filter(x=>mon(x.d)==m),e=E.filter(x=>mon(x.d)==m),a=agg(t,e),c=Math.min(n(S.comm),99)/100;
  const monthLabel=m;
@@ -561,12 +561,12 @@ function renderRep(){
  '<section class="report-panel"><div class="report-panel-head"><h3>تحليل المشاوير</h3><span>حسب المسافة وقيمة الرحلة</span></div><div class="report-two"><div><b style="font-size:12px">حسب المسافة</b>'+tbl(Dk,k=>DL[k])+'</div><div><b style="font-size:12px">حسب قيمة الرحلة</b>'+tbl(F,k=>FL[k])+'</div></div></section>'+
  '<section class="report-panel"><div class="report-panel-head"><h3>مقارنة شهرية</h3><span>قارن الشهر الحالي بشهر آخر</span></div><select id="cm" style="max-width:220px;margin-bottom:10px">'+ms.map(x=>'<option value="'+x+'" '+(x===compareMonth?'selected':'')+'>'+x+'</option>').join('')+'</select><div id="reportCompare">اختار شهر للمقارنة.</div></section>'+
  '<p class="report-note">صافي الربح = الإيرادات − عمولة التطبيق − المصروفات النقدية الفعلية − احتياطي الصيانة. احتياطي الصيانة تقديري، ويُخصم منه ما تم تسجيله كصيانة أو إصلاح لتجنب الخصم المزدوج. تكلفة التشغيل التقديرية للمقارنة فقط ولا تُخصم مرة أخرى.</p>'+
- '<div class="report-actions"><button class="s" id="xm">تصدير التقرير</button><button class="s" id="xa">ملخص كل الشهور</button><button class="s" id="xt">تصدير المشاوير</button><button class="s" id="xe">تصدير المصروفات</button></div></div>';
+ '<div class="report-actions"><button class="s" id="exT">تصدير المشاوير</button><button class="s" id="exE">تصدير المصروفات</button></div></div>';
  return out;
 }
 
 function show(){
- const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRep,set:renderSet};
+ const V={dash:renderDash,calc:renderCalc,log:renderLog,exp:renderExp,rep:renderRepV2,set:renderSet};
  document.getElementById('m').innerHTML=(V[tab]||renderDash)();
  document.getElementById('nav').innerHTML=[['dash','▦','الرئيسية'],['log','◷','المشاوير'],['calc','＋',''],['exp','♧','المصروفات'],['rep','▥','التقارير']].map(([k,i,l])=>`<a href="#" data-t="${k}" class="${tab==k?'on':''} ${k==='calc'?'nav-add':''}"><b>${i}</b>${l}</a>`).join('');
  if(tab=='calc')renderRes();bind()}
