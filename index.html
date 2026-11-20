@@ -300,6 +300,7 @@ main{max-width:780px!important;padding:18px 15px 30px!important}
 
 /* Executive report dashboard inspired by the supplied reference */
 .report-shell{direction:rtl;max-width:100%;color:var(--tx)}
+main:has(.report-shell){max-width:1120px;padding:18px 16px 34px}
 .report-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 15px}
 .report-toolbar h2{font-size:21px;margin:0;font-weight:900}
 .report-toolbar p{font-size:11px;color:var(--mu);margin:3px 0 0}
@@ -557,6 +558,7 @@ function renderRep(){
  '<section class="report-panel"><div class="report-panel-head"><h3>تقييم الأداء</h3><span>مقارنة بهدفك</span></div><div class="report-list-row"><span>مشاوير حققت الهدف</span><b>'+f(a.good)+' من '+f(a.N)+'</b></div><div class="report-progress"><i style="width:'+goodPct+'%"></i></div>'+insight+(prev?'<div class="report-list-row"><span>مقارنة بالشهر السابق</span><b class="'+(delta>=0?'pos':'neg')+'">'+(delta>=0?'+':'')+f(delta,1)+'%</b></div>':'')+'</section></div>'+
  '<section class="report-panel"><div class="report-panel-head"><h3>أفضل أوقات العمل</h3><span>صافي تقديري لكل ساعة</span></div>'+tbl(H.slice(0,5),x=>x+':00')+'</section>'+
  '<section class="report-panel"><div class="report-panel-head"><h3>تحليل المشاوير</h3><span>حسب المسافة وقيمة الرحلة</span></div><div class="report-two"><div><b style="font-size:12px">حسب المسافة</b>'+tbl(Dk,k=>DL[k])+'</div><div><b style="font-size:12px">حسب قيمة الرحلة</b>'+tbl(F,k=>FL[k])+'</div></div></section>'+
+ '<section class="report-panel"><div class="report-panel-head"><h3>مقارنة شهرية</h3><span>قارن الشهر الحالي بشهر آخر</span></div><select id="cm" style="max-width:220px;margin-bottom:10px">'+ms.map(x=>'<option value="'+x+'" '+(x===(cmpM||ms[1]||m)?'selected':'')+'>'+x+'</option>').join('')+'</select><div id="reportCompare">اختار شهر للمقارنة.</div></section>'+
  '<p class="report-note">صافي الربح = الإيرادات − عمولة التطبيق − المصروفات النقدية الفعلية − احتياطي الصيانة. احتياطي الصيانة تقديري، ويُخصم منه ما تم تسجيله كصيانة أو إصلاح لتجنب الخصم المزدوج. تكلفة التشغيل التقديرية للمقارنة فقط ولا تُخصم مرة أخرى.</p>'+
  '<div class="report-actions"><button class="s" id="xm">تصدير التقرير</button><button class="s" id="xa">ملخص كل الشهور</button><button class="s" id="xt">تصدير المشاوير</button><button class="s" id="xe">تصدير المصروفات</button></div></div>';
  return out;
